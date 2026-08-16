@@ -1,0 +1,27 @@
+# Amber Strata palette, ported exactly from CoolRetroTermAmber.colorscheme.
+background = #100902
+foreground = #ea851d
+bold-color = #ef871e
+faint-opacity = 0.53
+
+cursor-color = #ffaa20
+cursor-text = #100902
+selection-foreground = #ffd080
+selection-background = #6a3c0d
+
+palette = 0=#100902
+palette = 1=#b9370c
+palette = 2=#787012
+palette = 3=#eb9114
+palette = 4=#5c3614
+palette = 5=#a53e22
+palette = 6=#866f26
+palette = 7=#dc841c
+palette = 8=#6a3c0d
+palette = 9=#ff6918
+palette = 10=#cdaa24
+palette = 11=#ffcd3e
+palette = 12=#b97a26
+palette = 13=#f57d3e
+palette = 14=#f2b748
+palette = 15=#ffb840

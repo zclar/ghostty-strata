@@ -1,0 +1,48 @@
+# Amber Strata — modern amber CRT for Ghostty.
+# The theme and shader paths below resolve inside ~/.config/ghostty after install.
+
+theme = Amber Strata
+
+# Typography ported from the latest Konsole profile.
+font-family = Terminus (TTF)
+font-style = Medium
+font-size = 15
+font-thicken = true
+font-thicken-strength = 80
+adjust-cell-width = -6%
+adjust-cell-height = 8%
+
+# Comfortable modern framing.
+window-padding-x = 14
+window-padding-y = 10
+window-padding-balance = true
+window-padding-color = background
+window-decoration = auto
+window-titlebar-background = #0b0601
+window-titlebar-foreground = #ea851d
+window-theme = dark
+gtk-titlebar = true
+gtk-titlebar-style = tabs
+gtk-tabs-location = top
+gtk-toolbar-style = flat
+gtk-wide-tabs = false
+
+# Opaque pixels give the phosphor bloom a stable black-brown base.
+background-opacity = 1
+background-opacity-cells = false
+background-blur = false
+
+# Native cursor and bell behavior; the shader supplies the motion trail.
+cursor-style = block
+cursor-style-blink = true
+cursor-color = #ffaa20
+cursor-text = #100902
+bell-features = no-system,no-audio,attention,title,no-border
+
+# Ghostty-native post processing. Animation pauses for unfocused surfaces.
+custom-shader = shaders/amber-strata.glsl
+custom-shader-animation = true
+
+# Familiar controls used by the earlier WezTerm version.
+keybind = ctrl+w=close_tab
+keybind = ctrl+shift+p=toggle_command_palette
