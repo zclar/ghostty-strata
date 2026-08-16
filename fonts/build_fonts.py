@@ -104,9 +104,11 @@ def glyph_from_matrix(matrix: set[tuple[int, int]], shape: str):
         cx = X_START + col * X_STEP
         cy = Y_START + row * Y_STEP
         if shape == "dot":
-            add_circle(pen, cx, cy, 35)
+            # Slightly oversized nodes survive grayscale rasterization at the
+            # 13–16 px sizes used by terminal grids without becoming a blob.
+            add_circle(pen, cx, cy, 40)
         else:
-            add_rounded_square(pen, cx, cy, 39, 8)
+            add_rounded_square(pen, cx, cy, 43, 10)
     return pen.glyph()
 
 
@@ -114,7 +116,7 @@ def coarse_glyph(matrix: set[tuple[int, int]]):
     """Nothing-inspired coarse 5x7 display rhythm with original glyph maps."""
     pen = TTGlyphPen(None)
     for col, row in sorted(matrix):
-        add_circle(pen, 155 + col * 122, 85 + row * 118, 43)
+        add_circle(pen, 155 + col * 122, 85 + row * 118, 49)
     return pen.glyph()
 
 

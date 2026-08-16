@@ -118,6 +118,11 @@ The same choices appear in `Ctrl+Shift+P`. Reload with `Ctrl+Shift+,` after a
 font change. Printable ASCII and Latin-1 use the matrix face; Ghostty falls back
 for other scripts and specialist symbols.
 
+The settings preview changes immediately. Dot and Square enforce a readable
+13 pt floor; the intentionally coarser Matrix face uses a 15 pt floor. These
+faces remain terminal/display options—the compact settings controls use a clean
+UI font so small labels stay crisp.
+
 The generated TTF files are ready to install. Font developers can rebuild them
 from the OFL-licensed Terminus scaffold with:
 

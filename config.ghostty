@@ -3,15 +3,11 @@
 
 theme = Amber Strata
 
-# Typography ported from the latest Konsole profile.
-font-family = Terminus (TTF)
-font-style = Medium
+# Typography is owned by font.ghostty so selecting a face replaces it instead
+# of appending a fallback behind Terminus.
 font-size = 15
-font-thicken = true
-font-thicken-strength = 165
-adjust-cell-width = -6%
 adjust-cell-height = 8%
-# Optional installed font profile overrides the values above.
+# The installer always creates this file; optional keeps source previews valid.
 config-file = ?font.ghostty
 
 # Comfortable modern framing.

@@ -16,10 +16,10 @@ FONT_CONFIG = CONFIG / "font.ghostty"
 ACTIVE_SHADER = CONFIG / "shaders" / "active.glsl"
 
 FONTS = {
-    "Terminus": ("Terminus (TTF)", "Medium", True, 165, "-6%"),
-    "Strata Dot": ("Strata Dot", "Regular", False, 0, "0%"),
-    "Strata Square": ("Strata Square", "Regular", False, 0, "0%"),
-    "Strata Matrix": ("Strata Matrix", "Regular", False, 0, "3%"),
+    "Terminus": ("Terminus (TTF)", "Medium", True, 165, "-6%", 11),
+    "Strata Dot": ("Strata Dot", "Regular", False, 0, "0%", 13),
+    "Strata Square": ("Strata Square", "Regular", False, 0, "0%", 13),
+    "Strata Matrix": ("Strata Matrix", "Regular", False, 0, "3%", 15),
 }
 
 BG = "#100902"
@@ -132,7 +132,7 @@ class Settings(tk.Tk):
                 text=label,
                 value=label,
                 variable=self.font_choice,
-                command=self._update_preview,
+                command=self._select_font,
             ).grid(row=index, column=0, sticky="w", pady=3)
 
         ttk.Label(card, text="Size", style="Card.TLabel").grid(row=1, column=1, sticky="w", padx=(40, 0))
@@ -210,13 +210,23 @@ class Settings(tk.Tk):
         except tk.TclError:
             self.preview.configure(font=("Monospace", size))
 
+    def _select_font(self) -> None:
+        """Preview immediately and keep matrix faces above their legible floor."""
+        minimum = FONTS[self.font_choice.get()][5]
+        if self.font_size.get() < minimum:
+            self.font_size.set(minimum)
+        self._update_preview()
+        self.status.set(
+            "Preview updated. Apply, then press Ctrl+Shift+, in an existing Ghostty window."
+        )
+
     def _apply_glow_live(self) -> None:
         profile = "glow-on" if self.glow.get() else "glow-off"
         subprocess.run([str(REPO / "profile.sh"), profile], check=True)
         self.status.set(f"Glow {'enabled' if self.glow.get() else 'disabled'} live.")
 
     def _write_font(self) -> None:
-        family, style, thicken, default_strength, width = FONTS[self.font_choice.get()]
+        family, style, thicken, default_strength, width, _minimum = FONTS[self.font_choice.get()]
         strength = self.thickness.get() if thicken else default_strength
         FONT_CONFIG.parent.mkdir(parents=True, exist_ok=True)
         FONT_CONFIG.write_text(
