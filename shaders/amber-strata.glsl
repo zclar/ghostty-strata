@@ -1,8 +1,10 @@
 // Amber Strata Clean: modern phosphor glow without CRT aging artifacts.
 const float SHARPNESS = 0.20;
-const float GLOW_STRENGTH = 1.02;
-const float GLOW_RADIUS = 1.65;
-const float TRAIL_STRENGTH = 0.20;
+const float GLOW_STRENGTH = 1.28;
+const float GLOW_RADIUS = 1.80;
+const float TYPE_PULSE_STRENGTH = 0.48;
+const float TYPE_PULSE_RADIUS = 34.0;
+const float TRAIL_STRENGTH = 0.14;
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
     vec2 halfSize = max(cursor.zw * 0.5, vec2(1.0));
@@ -66,6 +68,19 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float age = max(iTime - iTimeCursorChange, 0.0);
     float previous = cursorMask(fragCoord, iPreviousCursor);
     float current = cursorMask(fragCoord, iCurrentCursor);
+
+    // Cursor movement accompanies normal typing. Briefly energize the newly
+    // written area, then let it fall away like phosphor afterglow.
+    vec2 pulseCenter = iCurrentCursor.xy + iCurrentCursor.zw * 0.5;
+    float pulseDistance = length((fragCoord - pulseCenter)
+        / vec2(TYPE_PULSE_RADIUS, TYPE_PULSE_RADIUS * 0.72));
+    float pulseShape = exp(-pulseDistance * pulseDistance * 2.4);
+    float pulseDecay = exp(-age * 5.2);
+    float typingPulse = pulseShape * pulseDecay
+        * TYPE_PULSE_STRENGTH * float(iFocus);
+    color += (softGlow * 0.72 + amberGlow * previous * 0.18)
+        * amberGlow * typingPulse;
+
     color += amberGlow * previous * (1.0 - current) * exp(-age * 9.0)
         * TRAIL_STRENGTH * float(iFocus);
 

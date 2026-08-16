@@ -76,6 +76,8 @@ The default shader is deliberately clean and crisp: no noise, scanlines,
 flicker, vignette, distortion, or artificial contrast. A restrained sharpen
 pass preserves the glyph core before a fractional-pixel Gaussian phosphor halo
 is applied, avoiding pixelated rings around curved and diagonal characters.
+Cursor movement triggers a localized phosphor pulse, giving typed characters a
+brief ignition and smooth afterglow instead of a simple cursor smear.
 Clearly labeled constants at the top control sharpness, character glow, and
 cursor afterglow.
 
