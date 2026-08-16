@@ -99,6 +99,33 @@ entry enters the installed command into that prompt. The switch updates the
 installed `shaders/active.glsl`, which Ghostty hot-reloads immediately. The
 active selection lives under `~/.config/ghostty`, so switching does not dirty
 the Git checkout.
+
+## Matrix fonts
+
+Amber Strata includes three original scalable monospaced faces. **Strata Dot**
+uses a fine 7×11 round-node grid, **Strata Square** uses softly rounded cells,
+and **Strata Matrix** uses a coarse, widely spaced 5×7 display rhythm inspired
+by modern dot-matrix industrial design. Terminus remains the default.
+
+```bash
+./font-profile.sh dot
+./font-profile.sh square
+./font-profile.sh matrix
+./font-profile.sh terminus
+```
+
+The same choices appear in `Ctrl+Shift+P`. Reload with `Ctrl+Shift+,` after a
+font change. Printable ASCII and Latin-1 use the matrix face; Ghostty falls back
+for other scripts and specialist symbols.
+
+The generated TTF files are ready to install. Font developers can rebuild them
+from the OFL-licensed Terminus scaffold with:
+
+```bash
+python3 -m pip install -r fonts/requirements.txt
+python3 fonts/build_fonts.py
+```
+
 Clearly labeled constants at the top control sharpness, character glow, and
 cursor afterglow.
 
@@ -129,6 +156,8 @@ backup if one was made:
 ```bash
 rm ~/.config/ghostty/config.ghostty
 rm ~/.config/ghostty/profile.sh
+rm ~/.config/ghostty/font-profile.sh
+rm ~/.config/ghostty/font.ghostty
 rm ~/.config/ghostty/themes/'Amber Strata'
 rm ~/.config/ghostty/shaders/amber-strata.glsl
 rm ~/.config/ghostty/shaders/active.glsl
@@ -138,8 +167,13 @@ rm ~/.config/ghostty/styles/amber-strata.css
 rm ~/.config/ghostty/profiles/active.ghostty
 rm ~/.config/ghostty/profiles/glow-on.ghostty
 rm ~/.config/ghostty/profiles/glow-off.ghostty
+rm ~/.local/share/fonts/amber-strata/StrataDot-Regular.ttf
+rm ~/.local/share/fonts/amber-strata/StrataSquare-Regular.ttf
+rm ~/.local/share/fonts/amber-strata/StrataMatrix-Regular.ttf
 ```
 
 ## License
 
-[MIT](LICENSE)
+The terminal configuration, shaders, scripts, and styles are [MIT](LICENSE).
+The Strata fonts and their source are licensed under the
+[SIL Open Font License 1.1](fonts/OFL.txt).
