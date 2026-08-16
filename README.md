@@ -89,6 +89,7 @@ animated block cursor; `glow-off` removes character glow and the typing pulse.
 
 ```bash
 ./profile.sh glow-on
+./profile.sh glow-soft
 ./profile.sh glow-off
 ```
 
@@ -105,12 +106,22 @@ the Git checkout.
 Amber Strata includes three original scalable monospaced faces. **Strata Dot**
 uses a fine 7×11 round-node grid, **Strata Square** uses softly rounded cells,
 and **Strata Matrix** uses a coarse, widely spaced 5×7 display rhythm inspired
-by modern dot-matrix industrial design. Terminus remains the default.
+by modern dot-matrix industrial design. They are display faces: their visible
+node grids need 20–22 pt to resolve cleanly and are not recommended for dense
+shell text.
+
+For everyday terminal text, the settings panel also offers **DM Mono** (clean
+modern), **IBM Plex Mono** (technical modern-retro), and **IBM 3270** (stronger
+retro). These full-outline fonts preserve detail at 11–15 pt. Terminus remains
+the default.
 
 ```bash
 ./font-profile.sh dot
 ./font-profile.sh square
 ./font-profile.sh matrix
+./font-profile.sh modern
+./font-profile.sh technical
+./font-profile.sh retro
 ./font-profile.sh terminus
 ```
 
@@ -118,10 +129,13 @@ The same choices appear in `Ctrl+Shift+P`. Reload with `Ctrl+Shift+,` after a
 font change. Printable ASCII and Latin-1 use the matrix face; Ghostty falls back
 for other scripts and specialist symbols.
 
-The settings preview changes immediately. Dot and Square enforce a readable
-13 pt floor; the intentionally coarser Matrix face uses a 15 pt floor. These
-faces remain terminal/display options—the compact settings controls use a clean
-UI font so small labels stay crisp.
+The settings preview changes immediately. Dot and Square enforce a 20 pt
+display floor; the intentionally coarser Matrix face uses 22 pt. Compact
+settings controls use a clean UI font so small labels stay crisp.
+
+When glow is enabled with a Strata display face, the settings panel applies a
+tighter display-safe halo automatically. This keeps neighboring dots separate;
+the normal stronger glow remains unchanged for full-outline terminal fonts.
 
 Version 1.1 uses a conventional condensed terminal advance, so full-screen
 layouts retain roughly the same column count as Terminus instead of being

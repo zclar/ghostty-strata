@@ -58,9 +58,13 @@ keybind = ctrl+shift+p=toggle_command_palette
 
 # UI-accessible profile controls. Use these from a normal shell prompt.
 command-palette-entry = title:"Amber Strata: Glow On",description:"Enable phosphor glow (run at a shell prompt).",action:"text:~/.config/ghostty/profile.sh glow-on\n"
+command-palette-entry = title:"Amber Strata: Display-Safe Glow",description:"Use tighter glow that preserves matrix nodes (run at a shell prompt).",action:"text:~/.config/ghostty/profile.sh glow-soft\n"
 command-palette-entry = title:"Amber Strata: Glow Off",description:"Disable phosphor glow (run at a shell prompt).",action:"text:~/.config/ghostty/profile.sh glow-off\n"
 command-palette-entry = title:"Amber Strata Font: Terminus",description:"Use the original Terminus face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh terminus\n"
-command-palette-entry = title:"Amber Strata Font: Strata Dot",description:"Use the round matrix face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh dot\n"
-command-palette-entry = title:"Amber Strata Font: Strata Square",description:"Use the square matrix face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh square\n"
-command-palette-entry = title:"Amber Strata Font: Strata Matrix",description:"Use the coarse 5x7 dot face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh matrix\n"
+command-palette-entry = title:"Amber Strata Font: DM Mono",description:"Use the crisp modern face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh modern\n"
+command-palette-entry = title:"Amber Strata Font: IBM Plex Mono",description:"Use the technical modern-retro face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh technical\n"
+command-palette-entry = title:"Amber Strata Font: IBM 3270",description:"Use the readable retro face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh retro\n"
+command-palette-entry = title:"Amber Strata Display: Dot",description:"Large display text only (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh dot\n"
+command-palette-entry = title:"Amber Strata Display: Square",description:"Large display text only (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh square\n"
+command-palette-entry = title:"Amber Strata Display: Matrix",description:"Large display text only (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh matrix\n"
 command-palette-entry = title:"Amber Strata: Open Settings",description:"Open the visual Amber Strata control panel (run at a shell prompt).",action:"text:~/.config/ghostty/settings.py\n"

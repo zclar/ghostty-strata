@@ -3,9 +3,9 @@ set -euo pipefail
 
 profile="${1:-}"
 case "$profile" in
-    terminus|dot|square|matrix) ;;
+    terminus|modern|technical|retro|dot|square|matrix) ;;
     *)
-        printf 'Usage: %s {terminus|dot|square|matrix}\n' "${0##*/}" >&2
+        printf 'Usage: %s {terminus|modern|technical|retro|dot|square|matrix}\n' "${0##*/}" >&2
         exit 2
         ;;
 esac
@@ -17,6 +17,15 @@ mkdir -p "$config_dir"
 case "$profile" in
     terminus)
         family='Terminus (TTF)'; style='Medium'; thicken='true'; strength='165'; cell_width='-6%'
+        ;;
+    modern)
+        family='DM Mono'; style='Regular'; thicken='false'; strength='0'; cell_width='-3%'
+        ;;
+    technical)
+        family='IBM Plex Mono'; style='Regular'; thicken='false'; strength='0'; cell_width='-3%'
+        ;;
+    retro)
+        family='IBM 3270'; style='Regular'; thicken='false'; strength='0'; cell_width='-4%'
         ;;
     dot)
         family='Strata Dot'; style='Regular'; thicken='false'; strength='0'; cell_width='0%'

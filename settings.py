@@ -17,9 +17,12 @@ ACTIVE_SHADER = CONFIG / "shaders" / "active.glsl"
 
 FONTS = {
     "Terminus": ("Terminus (TTF)", "Medium", True, 165, "-6%", 11),
-    "Strata Dot": ("Strata Dot", "Regular", False, 0, "0%", 13),
-    "Strata Square": ("Strata Square", "Regular", False, 0, "0%", 13),
-    "Strata Matrix": ("Strata Matrix", "Regular", False, 0, "3%", 15),
+    "DM Mono — Modern": ("DM Mono", "Regular", False, 0, "-3%", 11),
+    "IBM Plex Mono — Technical": ("IBM Plex Mono", "Regular", False, 0, "-3%", 11),
+    "IBM 3270 — Retro": ("IBM 3270", "Regular", False, 0, "-4%", 12),
+    "Strata Dot — Display": ("Strata Dot", "Regular", False, 0, "0%", 20),
+    "Strata Square — Display": ("Strata Square", "Regular", False, 0, "0%", 20),
+    "Strata Matrix — Display": ("Strata Matrix", "Regular", False, 0, "3%", 22),
 }
 
 BG = "#100902"
@@ -44,8 +47,8 @@ class Settings(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title("Amber Strata Settings")
-        self.geometry("700x720")
-        self.minsize(620, 680)
+        self.geometry("760x780")
+        self.minsize(680, 740)
         self.configure(bg=BG)
 
         current = parse_config()
@@ -59,11 +62,11 @@ class Settings(tk.Tk):
         self.thickness = tk.IntVar(
             value=int(current.get("font-thicken-strength", "165"))
         )
-        glow_source = REPO / "shaders" / "amber-strata.glsl"
+        glow_off_source = REPO / "shaders" / "cursor-pulse.glsl"
         glow_enabled = (
             ACTIVE_SHADER.exists()
-            and glow_source.exists()
-            and ACTIVE_SHADER.read_bytes() == glow_source.read_bytes()
+            and glow_off_source.exists()
+            and ACTIVE_SHADER.read_bytes() != glow_off_source.read_bytes()
         )
         self.glow = tk.BooleanVar(value=glow_enabled)
         self.status = tk.StringVar(value="Changes preview here immediately.")
@@ -221,9 +224,15 @@ class Settings(tk.Tk):
         )
 
     def _apply_glow_live(self) -> None:
-        profile = "glow-on" if self.glow.get() else "glow-off"
+        display_face = self.font_choice.get().endswith("— Display")
+        profile = "glow-soft" if self.glow.get() and display_face else (
+            "glow-on" if self.glow.get() else "glow-off"
+        )
         subprocess.run([str(REPO / "profile.sh"), profile], check=True)
-        self.status.set(f"Glow {'enabled' if self.glow.get() else 'disabled'} live.")
+        state = "display-safe" if profile == "glow-soft" else (
+            "enabled" if self.glow.get() else "disabled"
+        )
+        self.status.set(f"Glow {state} live.")
 
     def _write_font(self) -> None:
         family, style, thicken, default_strength, width, _minimum = FONTS[self.font_choice.get()]
