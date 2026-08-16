@@ -29,7 +29,7 @@ case "$profile" in
         ;;
 esac
 
-printf 'font-family = %s\nfont-style = %s\nfont-thicken = %s\nfont-thicken-strength = %s\nadjust-cell-width = %s\n' \
+printf 'font-family =\nfont-family = %s\nfont-style = %s\nfont-thicken = %s\nfont-thicken-strength = %s\nadjust-cell-width = %s\n' \
     "$family" "$style" "$thicken" "$strength" "$cell_width" > "$active_path"
 
 printf 'Amber Strata font: %s\n' "$family"

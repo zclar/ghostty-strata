@@ -13,8 +13,19 @@ headerbar,
 .titlebar,
 tabbar,
 tabbox {
+  font-family: "Strata Dot";
   background-color: @strata_bg;
   color: @strata_text;
+}
+
+popover,
+menu,
+dialog,
+entry,
+searchentry,
+tooltip,
+button {
+  font-family: "Strata Dot";
 }
 
 headerbar,

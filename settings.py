@@ -77,7 +77,7 @@ class Settings(tk.Tk):
         style.theme_use("clam")
         style.configure("TFrame", background=BG)
         style.configure("Card.TFrame", background=SURFACE)
-        style.configure("TLabel", background=BG, foreground=TEXT, font=("Sans", 10))
+        style.configure("TLabel", background=BG, foreground=TEXT, font=("Strata Dot", 10))
         # The finer 7x11 face retains detail at display size. Explicit tracking
         # keeps the identity open and technical instead of horizontally cramped.
         style.configure(
@@ -220,6 +220,7 @@ class Settings(tk.Tk):
         strength = self.thickness.get() if thicken else default_strength
         FONT_CONFIG.parent.mkdir(parents=True, exist_ok=True)
         FONT_CONFIG.write_text(
+            "font-family =\n"
             f"font-family = {family}\n"
             f"font-style = {style}\n"
             f"font-size = {self.font_size.get():g}\n"
