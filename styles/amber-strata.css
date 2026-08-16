@@ -140,7 +140,10 @@ tooltip.background {
   border: 1px solid @strata_border;
 }
 
-selection {
-  color: #ffd080;
-  background-color: #6a3c0d;
+selection,
+*:selected,
+text selection,
+entry selection {
+  color: @strata_bg;
+  background-color: @strata_text;
 }

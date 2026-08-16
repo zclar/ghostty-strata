@@ -22,7 +22,9 @@ vec3 luminousPart(vec3 sampleColor) {
     // Remove the stable terminal background so only characters and UI glow.
     vec3 delta = max(sampleColor - iBackgroundColor, vec3(0.0));
     float energy = max(delta.r, max(delta.g, delta.b));
-    return delta * smoothstep(0.025, 0.24, energy);
+    // Ignore restrained dark UI surfaces (for example a TUI composer using
+    // ANSI bright-black) so panels stay crisp while amber glyphs still bloom.
+    return delta * smoothstep(0.10, 0.30, energy);
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {

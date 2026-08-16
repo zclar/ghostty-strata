@@ -20,6 +20,12 @@ terminal grid or making everyday text difficult to read.
 The palette is a direct port of `CoolRetroTermAmber.colorscheme`. Terminus
 (TTF), 15 pt, matches the latest Konsole profile.
 
+Selection uses a direct amber/background inversion, matching Konsole's implicit
+selection behavior. ANSI bright black is a dark amber surface rather than
+neutral gray, which brings TUI input panels such as the Codex composer into the
+same palette. The shader excludes that low-energy surface from glyph bloom so
+the panel remains crisp.
+
 ## Requirements
 
 - Ghostty 1.2.0 or newer (cursor shader uniforms were added in 1.2)

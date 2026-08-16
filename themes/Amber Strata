@@ -6,8 +6,9 @@ faint-opacity = 0.53
 
 cursor-color = #ffaa20
 cursor-text = #100902
-selection-foreground = #ffd080
-selection-background = #6a3c0d
+# Konsole's implicit selection behavior is a true foreground/background flip.
+selection-foreground = #100902
+selection-background = #ea851d
 
 palette = 0=#100902
 palette = 1=#b9370c
@@ -17,7 +18,8 @@ palette = 4=#5c3614
 palette = 5=#a53e22
 palette = 6=#866f26
 palette = 7=#dc841c
-palette = 8=#6a3c0d
+# ANSI bright black is used by TUIs for raised input panels.
+palette = 8=#2b1806
 palette = 9=#ff6918
 palette = 10=#cdaa24
 palette = 11=#ffcd3e
