@@ -28,8 +28,12 @@ the panel remains crisp.
 
 Codex currently emits its composer as a fixed RGB surface rather than an ANSI
 palette color. Both Amber Strata shaders selectively re-tone that low-chroma
-mid-dark panel to the theme surface. The animated cursor preserves the source
+mid-dark panel to the terminal background. The animated cursor preserves the source
 glyph while faded out and explicitly draws its dark inverse inside the block.
+
+With character glow enabled, every cursor-changing keystroke resets the bloom
+to full energy. It then eases back to the selected profile's idle strength, so
+typing feels responsive without leaving the whole screen permanently overlit.
 
 ## Requirements
 

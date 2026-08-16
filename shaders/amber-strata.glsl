@@ -4,6 +4,8 @@ const float GLOW_STRENGTH = 1.28;
 const float GLOW_RADIUS = 1.80;
 const float TYPE_PULSE_STRENGTH = 0.48;
 const float TYPE_PULSE_RADIUS = 34.0;
+const float TYPING_GLOW_PEAK = 1.28;
+const float TYPING_GLOW_DECAY = 2.40;
 const float TRAIL_STRENGTH = 0.14;
 const float CURSOR_PULSE_SECONDS = 1.45;
 const float CURSOR_MIN_OPACITY = 0.0;
@@ -38,7 +40,7 @@ vec3 themedTuiSurface(vec3 sampleColor) {
     float neutral = 1.0 - smoothstep(0.035, 0.10, chroma);
     float midDark = smoothstep(0.09, 0.14, luminance)
         * (1.0 - smoothstep(0.23, 0.32, luminance));
-    return mix(sampleColor, vec3(0.106, 0.059, 0.016), neutral * midDark * 0.94);
+    return mix(sampleColor, iBackgroundColor, neutral * midDark * 0.98);
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
@@ -46,6 +48,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec2 px = 1.0 / iResolution.xy;
     vec4 source = texture(iChannel0, uv);
     vec3 themedSource = themedTuiSurface(source.rgb);
+    float age = max(iTime - iTimeCursorChange, 0.0);
 
     // Restore a defined glyph core before adding light around it. This is a
     // restrained four-neighbor unsharp mask, gated to avoid ringing in the UI.
@@ -83,9 +86,17 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float haloSpace = 1.0 - core * 0.82;
     vec3 amberGlow = vec3(1.0, 0.54, 0.12);
     vec3 color = crispSource;
-    color += softGlow * amberGlow * GLOW_STRENGTH * haloSpace;
+    // Every typed character moves the cursor and resets iTimeCursorChange.
+    // Restore full phosphor energy immediately, then settle to the selected
+    // profile's quieter idle strength until the next character arrives.
+    float typingGlowEnvelope = exp(-age * TYPING_GLOW_DECAY);
+    float liveGlowStrength = mix(
+        GLOW_STRENGTH,
+        TYPING_GLOW_PEAK,
+        typingGlowEnvelope
+    );
+    color += softGlow * amberGlow * liveGlowStrength * haloSpace;
 
-    float age = max(iTime - iTimeCursorChange, 0.0);
     float previous = cursorMask(fragCoord, iPreviousCursor);
     float current = cursorMask(fragCoord, iCurrentCursor);
 

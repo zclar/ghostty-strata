@@ -20,7 +20,7 @@ vec3 themedTuiSurface(vec3 sampleColor) {
     float neutral = 1.0 - smoothstep(0.035, 0.10, chroma);
     float midDark = smoothstep(0.09, 0.14, luminance)
         * (1.0 - smoothstep(0.23, 0.32, luminance));
-    return mix(sampleColor, vec3(0.106, 0.059, 0.016), neutral * midDark * 0.94);
+    return mix(sampleColor, iBackgroundColor, neutral * midDark * 0.98);
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
