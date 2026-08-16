@@ -1,7 +1,7 @@
 // Amber Strata Clean: modern phosphor glow without CRT aging artifacts.
 const float SHARPNESS = 0.20;
-const float GLOW_STRENGTH = 0.72;
-const float GLOW_RADIUS = 1.45;
+const float GLOW_STRENGTH = 1.02;
+const float GLOW_RADIUS = 1.65;
 const float TRAIL_STRENGTH = 0.20;
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
