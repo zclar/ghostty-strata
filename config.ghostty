@@ -8,7 +8,7 @@ font-family = Terminus (TTF)
 font-style = Medium
 font-size = 15
 font-thicken = true
-font-thicken-strength = 80
+font-thicken-strength = 210
 adjust-cell-width = -6%
 adjust-cell-height = 8%
 
@@ -26,6 +26,7 @@ gtk-titlebar-style = tabs
 gtk-tabs-location = top
 gtk-toolbar-style = flat
 gtk-wide-tabs = false
+gtk-custom-css = styles/amber-strata.css
 
 # Opaque pixels give the phosphor bloom a stable black-brown base.
 background-opacity = 1
@@ -39,9 +40,18 @@ cursor-color = #ffaa20
 cursor-text = #100902
 bell-features = no-system,no-audio,attention,title,no-border
 
-# Ghostty-native post processing. Animation pauses for unfocused surfaces.
+# Clean phosphor glow is the default. The optional classic CRT shader adds
+# scanlines, flicker, grain, and a vignette for users who want those artifacts.
 custom-shader = shaders/amber-strata.glsl
 custom-shader-animation = true
+
+# Keep splits and overlays inside the Amber Strata visual system.
+split-divider-color = #6a3c0d
+unfocused-split-opacity = 0.92
+unfocused-split-fill = #100902
+resize-overlay = always
+resize-overlay-position = center
+resize-overlay-duration = 350ms
 
 # Familiar controls used by the earlier WezTerm version.
 keybind = ctrl+w=close_tab

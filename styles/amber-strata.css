@@ -1,0 +1,123 @@
+/* Amber Strata shell — GTK 4 / libadwaita */
+@define-color strata_bg #100902;
+@define-color strata_surface #1b0f04;
+@define-color strata_surface_hover #2b1806;
+@define-color strata_border #6a3c0d;
+@define-color strata_muted #a96318;
+@define-color strata_text #ea851d;
+@define-color strata_bright #ffb840;
+
+window,
+window.background,
+headerbar,
+.titlebar,
+tabbar,
+tabbox {
+  background-color: @strata_bg;
+  color: @strata_text;
+}
+
+headerbar,
+.titlebar {
+  border-bottom: 1px solid alpha(@strata_border, 0.75);
+  box-shadow: none;
+}
+
+tabbar tab,
+tabbox tab {
+  min-height: 30px;
+  margin: 4px 2px 3px 2px;
+  padding: 0 10px;
+  border-radius: 7px;
+  background-color: transparent;
+  color: @strata_muted;
+}
+
+tabbar tab:hover,
+tabbox tab:hover {
+  background-color: @strata_surface_hover;
+  color: @strata_bright;
+}
+
+tabbar tab:checked,
+tabbox tab:checked,
+tabbar tab:selected,
+tabbox tab:selected {
+  background-color: @strata_surface;
+  color: @strata_bright;
+  box-shadow: inset 0 -2px @strata_text;
+}
+
+button {
+  border-radius: 7px;
+  color: @strata_text;
+  background-color: transparent;
+  box-shadow: none;
+}
+
+button:hover {
+  color: @strata_bright;
+  background-color: @strata_surface_hover;
+}
+
+button:active,
+button:checked {
+  color: @strata_bg;
+  background-color: @strata_text;
+}
+
+popover > contents,
+popover.background > contents,
+menu,
+.menu,
+dialog,
+messagedialog {
+  color: @strata_text;
+  background-color: @strata_surface;
+  border: 1px solid @strata_border;
+  border-radius: 9px;
+}
+
+entry,
+searchentry {
+  color: @strata_bright;
+  background-color: @strata_bg;
+  border: 1px solid @strata_border;
+  border-radius: 7px;
+  caret-color: @strata_bright;
+}
+
+entry:focus,
+searchentry:focus {
+  border-color: @strata_text;
+  box-shadow: 0 0 0 2px alpha(@strata_text, 0.18);
+}
+
+separator {
+  background-color: @strata_border;
+  min-width: 1px;
+  min-height: 1px;
+}
+
+scrollbar slider {
+  min-width: 6px;
+  min-height: 24px;
+  border-radius: 6px;
+  background-color: alpha(@strata_text, 0.36);
+}
+
+scrollbar slider:hover {
+  background-color: alpha(@strata_bright, 0.65);
+}
+
+tooltip,
+tooltip.background {
+  color: @strata_bright;
+  background-color: @strata_surface;
+  border: 1px solid @strata_border;
+}
+
+selection {
+  color: #ffd080;
+  background-color: #6a3c0d;
+}

@@ -2,8 +2,8 @@
 
 Amber Strata is a modern amber-CRT theme for [Ghostty](https://ghostty.org/).
 It keeps the exact palette and Terminus character of the original Konsole
-profile, then adds GPU-rendered phosphor bloom, scanlines, gentle flicker,
-vignette, and an animated cursor afterglow.
+profile, then adds clean GPU-rendered phosphor bloom, an animated cursor
+afterglow, and a matching modern application shell.
 
 The result is deliberately restrained: retro atmosphere without bending the
 terminal grid or making everyday text difficult to read.
@@ -12,7 +12,9 @@ terminal grid or making everyday text difficult to read.
 
 - `config.ghostty` — complete Ghostty setup, including typography and window UI
 - `themes/Amber Strata` — the portable 16-color amber palette
-- `shaders/amber-strata.glsl` — CRT and cursor animation pass
+- `shaders/amber-strata.glsl` — clean phosphor glow and cursor animation
+- `shaders/classic-crt.glsl` — optional scanlines, grain, flicker, and vignette
+- `styles/amber-strata.css` — tabs, titlebar, controls, menus, and overlays
 - `install.sh` — safe installer that backs up an existing Ghostty config
 
 The palette is a direct port of `CoolRetroTermAmber.colorscheme`. Terminus
@@ -68,12 +70,21 @@ If a shader ever renders a black window, start Ghostty with the base theme only:
 ghostty --config-file="$(pwd)/themes/Amber Strata"
 ```
 
-## Tune the effects
+## Clean and classic effects
 
-The clearly labeled constants at the top of
-`shaders/amber-strata.glsl` control bloom, scanlines, flicker, grain, vignette,
-and cursor afterglow. Values are intentionally conservative. Set an effect's
-strength to `0.0` to disable it.
+The default shader is deliberately clean: no noise, scanlines, flicker,
+vignette, distortion, or artificial contrast. Clearly labeled constants at
+the top control only character glow and cursor afterglow.
+
+For an aged CRT appearance, add this directly after the default shader in
+`config.ghostty`:
+
+```ini
+custom-shader = shaders/classic-crt.glsl
+```
+
+Ghostty runs repeated shaders in order, so the optional artifacts are layered
+over the clean glow.
 
 For a static, lower-power version, change this line in `config.ghostty`:
 
@@ -93,6 +104,8 @@ backup if one was made:
 rm ~/.config/ghostty/config.ghostty
 rm ~/.config/ghostty/themes/'Amber Strata'
 rm ~/.config/ghostty/shaders/amber-strata.glsl
+rm ~/.config/ghostty/shaders/classic-crt.glsl
+rm ~/.config/ghostty/styles/amber-strata.css
 ```
 
 ## License
