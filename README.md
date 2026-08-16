@@ -74,7 +74,8 @@ ghostty --config-file="$(pwd)/themes/Amber Strata"
 
 The default shader is deliberately clean and crisp: no noise, scanlines,
 flicker, vignette, distortion, or artificial contrast. A restrained sharpen
-pass preserves the glyph core before the tight phosphor halo is applied.
+pass preserves the glyph core before a fractional-pixel Gaussian phosphor halo
+is applied, avoiding pixelated rings around curved and diagonal characters.
 Clearly labeled constants at the top control sharpness, character glow, and
 cursor afterglow.
 

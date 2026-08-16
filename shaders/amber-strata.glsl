@@ -1,7 +1,7 @@
 // Amber Strata Clean: modern phosphor glow without CRT aging artifacts.
 const float SHARPNESS = 0.20;
-const float INNER_GLOW = 0.58;
-const float OUTER_GLOW = 0.48;
+const float GLOW_STRENGTH = 0.72;
+const float GLOW_RADIUS = 1.45;
 const float TRAIL_STRENGTH = 0.20;
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
@@ -39,28 +39,21 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec3 crispSource = max(source.rgb + detail * SHARPNESS
         * smoothstep(0.02, 0.16, glyphEnergy), vec3(0.0));
 
-    // A close, restrained halo keeps phosphor character without softening type.
-    vec3 inner = vec3(0.0);
-    inner += luminousPart(texture(iChannel0, uv + vec2( 1.5,  0.0) * px).rgb);
-    inner += luminousPart(texture(iChannel0, uv + vec2(-1.5,  0.0) * px).rgb);
-    inner += luminousPart(texture(iChannel0, uv + vec2( 0.0,  1.5) * px).rgb);
-    inner += luminousPart(texture(iChannel0, uv + vec2( 0.0, -1.5) * px).rgb);
-    inner += luminousPart(texture(iChannel0, uv + vec2( 1.2,  1.2) * px).rgb);
-    inner += luminousPart(texture(iChannel0, uv + vec2(-1.2,  1.2) * px).rgb);
-    inner += luminousPart(texture(iChannel0, uv + vec2( 1.2, -1.2) * px).rgb);
-    inner += luminousPart(texture(iChannel0, uv + vec2(-1.2, -1.2) * px).rgb);
-    inner *= 0.125;
-
-    vec3 outer = vec3(0.0);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 3.5,  0.0) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2(-3.5,  0.0) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 0.0,  3.5) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 0.0, -3.5) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 2.5,  2.5) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2(-2.5,  2.5) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 2.5, -2.5) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2(-2.5, -2.5) * px).rgb);
-    outer *= 0.125;
+    // A fractional-pixel 5x5 Gaussian produces a continuous halo. Bilinear
+    // texture sampling blends between physical pixels so no sample ring or
+    // staircase pattern is visible around diagonal and curved glyph edges.
+    vec3 softGlow = vec3(0.0);
+    float totalWeight = 0.0;
+    for (int y = -2; y <= 2; ++y) {
+        for (int x = -2; x <= 2; ++x) {
+            vec2 samplePoint = vec2(float(x), float(y));
+            float weight = exp(-dot(samplePoint, samplePoint) * 0.42);
+            vec2 offset = samplePoint * GLOW_RADIUS * px;
+            softGlow += luminousPart(texture(iChannel0, uv + offset).rgb) * weight;
+            totalWeight += weight;
+        }
+    }
+    softGlow /= totalWeight;
 
     // Put the glow primarily into dark pixels around the glyph. The bright
     // core stays sharpened instead of being blurred or overexposed.
@@ -68,8 +61,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float haloSpace = 1.0 - core * 0.82;
     vec3 amberGlow = vec3(1.0, 0.54, 0.12);
     vec3 color = crispSource;
-    color += inner * amberGlow * INNER_GLOW * haloSpace;
-    color += outer * amberGlow * OUTER_GLOW * haloSpace;
+    color += softGlow * amberGlow * GLOW_STRENGTH * haloSpace;
 
     float age = max(iTime - iTimeCursorChange, 0.0);
     float previous = cursorMask(fragCoord, iPreviousCursor);
