@@ -123,6 +123,10 @@ The settings preview changes immediately. Dot and Square enforce a readable
 faces remain terminal/display options—the compact settings controls use a clean
 UI font so small labels stay crisp.
 
+Version 1.1 uses a conventional condensed terminal advance, so full-screen
+layouts retain roughly the same column count as Terminus instead of being
+pushed beyond the right edge.
+
 The generated TTF files are ready to install. Font developers can rebuild them
 from the OFL-licensed Terminus scaffold with:
 

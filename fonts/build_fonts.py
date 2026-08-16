@@ -14,14 +14,14 @@ from fontTools.pens.ttGlyphPen import TTGlyphPen
 from fontTools.ttLib import TTFont
 
 UPEM = 1000
-ADVANCE = 800
+ADVANCE = 600
 ASCENT = 850
 DESCENT = -200
 COLS = 7
 ROWS = 11
-X_STEP = 100
+X_STEP = 72
 Y_STEP = 82
-X_START = 100
+X_START = 55
 Y_START = -30
 
 
@@ -35,10 +35,12 @@ def terminus_path() -> Path:
     return path
 
 
-def add_circle(pen: TTGlyphPen, cx: float, cy: float, radius: float) -> None:
+def add_ellipse(
+    pen: TTGlyphPen, cx: float, cy: float, x_radius: float, y_radius: float
+) -> None:
     points = [
-        (cx + math.cos(index * math.tau / 16) * radius,
-         cy + math.sin(index * math.tau / 16) * radius)
+        (cx + math.cos(index * math.tau / 16) * x_radius,
+         cy + math.sin(index * math.tau / 16) * y_radius)
         for index in range(16)
     ]
     pen.moveTo(points[0])
@@ -104,11 +106,11 @@ def glyph_from_matrix(matrix: set[tuple[int, int]], shape: str):
         cx = X_START + col * X_STEP
         cy = Y_START + row * Y_STEP
         if shape == "dot":
-            # Slightly oversized nodes survive grayscale rasterization at the
-            # 13–16 px sizes used by terminal grids without becoming a blob.
-            add_circle(pen, cx, cy, 40)
+            # Condensed horizontal geometry matches a conventional terminal
+            # cell; tall nodes stay crisp at the 13–16 px sizes used in grids.
+            add_ellipse(pen, cx, cy, 31, 40)
         else:
-            add_rounded_square(pen, cx, cy, 43, 10)
+            add_rounded_square(pen, cx, cy, 34, 9)
     return pen.glyph()
 
 
@@ -116,7 +118,7 @@ def coarse_glyph(matrix: set[tuple[int, int]]):
     """Nothing-inspired coarse 5x7 display rhythm with original glyph maps."""
     pen = TTGlyphPen(None)
     for col, row in sorted(matrix):
-        add_circle(pen, 155 + col * 122, 85 + row * 118, 49)
+        add_ellipse(pen, 90 + col * 94, 85 + row * 118, 38, 49)
     return pen.glyph()
 
 
@@ -149,10 +151,10 @@ def build(source_path: Path, output: Path, family: str, shape: str) -> None:
             "copyright": "Terminus Copyright (C) 2016 Dimitar Toshkov Zhekov; Copyright (C) 2017 Tilman Blumenbach. Strata matrix adaptation Copyright (C) 2026 The Amber Strata Project Authors.",
             "familyName": family,
             "styleName": "Regular",
-            "uniqueFontIdentifier": f"AmberStrata:{family}:1.000",
+            "uniqueFontIdentifier": f"AmberStrata:{family}:1.100",
             "fullName": f"{family} Regular",
             "psName": family.replace(" ", "-") + "-Regular",
-            "version": "Version 1.000",
+            "version": "Version 1.100",
             "manufacturer": "Amber Strata Project",
             "designer": "Amber Strata Project",
             "description": "Original 7x11 modern matrix terminal typeface.",
@@ -171,6 +173,7 @@ def build(source_path: Path, output: Path, family: str, shape: str) -> None:
         usWidthClass=5,
     )
     builder.setupPost(isFixedPitch=1)
+    builder.setupHead(fontRevision=1.1)
     builder.setupMaxp()
     output.parent.mkdir(parents=True, exist_ok=True)
     builder.save(output)
