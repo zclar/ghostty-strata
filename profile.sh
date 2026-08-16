@@ -12,15 +12,17 @@ esac
 
 repo_dir="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 config_dir="${XDG_CONFIG_HOME:-${HOME:?}/.config}/ghostty"
-active_path="$config_dir/profiles/active.ghostty"
-source_path="$repo_dir/profiles/$profile.ghostty"
+active_path="$config_dir/shaders/active.glsl"
 
-mkdir -p "$config_dir/profiles"
-if [[ -e "$active_path" && ! -L "$active_path" ]]; then
-    printf 'Refusing to replace non-link profile: %s\n' "$active_path" >&2
-    exit 1
-fi
+case "$profile" in
+    glow-on) source_path="$repo_dir/shaders/amber-strata.glsl" ;;
+    glow-off) source_path="$repo_dir/shaders/cursor-pulse.glsl" ;;
+esac
 
-ln -sfn -- "$source_path" "$active_path"
+mkdir -p "$config_dir/shaders"
+# Update the watched shader itself; Ghostty hot-reloads shaders without a
+# configuration reload. active.glsl is installer-owned and never a repo file.
+profile_contents="$(<"$source_path")"
+printf '%s\n' "$profile_contents" > "$active_path"
 printf 'Amber Strata profile: %s\n' "$profile"
-printf 'Reload Ghostty with Ctrl+Shift+,.\n'
+printf 'Ghostty is hot-reloading the effect now.\n'

@@ -27,6 +27,7 @@ link_file() {
 }
 
 link_file "$repo_dir/config.ghostty" "$config_dir/config.ghostty"
+link_file "$repo_dir/profile.sh" "$config_dir/profile.sh"
 link_file "$repo_dir/themes/Amber Strata" "$config_dir/themes/Amber Strata"
 link_file "$repo_dir/shaders/amber-strata.glsl" "$config_dir/shaders/amber-strata.glsl"
 link_file "$repo_dir/shaders/cursor-pulse.glsl" "$config_dir/shaders/cursor-pulse.glsl"
@@ -35,8 +36,9 @@ link_file "$repo_dir/styles/amber-strata.css" "$config_dir/styles/amber-strata.c
 link_file "$repo_dir/profiles/glow-on.ghostty" "$config_dir/profiles/glow-on.ghostty"
 link_file "$repo_dir/profiles/glow-off.ghostty" "$config_dir/profiles/glow-off.ghostty"
 
-if [[ ! -e "$config_dir/profiles/active.ghostty" && ! -L "$config_dir/profiles/active.ghostty" ]]; then
-    ln -s -- "$repo_dir/profiles/glow-on.ghostty" "$config_dir/profiles/active.ghostty"
+if [[ ! -e "$config_dir/shaders/active.glsl" ]]; then
+    profile_contents="$(<"$repo_dir/shaders/amber-strata.glsl")"
+    printf '%s\n' "$profile_contents" > "$config_dir/shaders/active.glsl"
     printf 'Selected profile: glow-on\n'
 fi
 

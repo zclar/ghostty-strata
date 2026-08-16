@@ -5,7 +5,7 @@ const float CURSOR_MAX_OPACITY = 1.0;
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
     vec2 halfSize = max(cursor.zw * 0.5, vec2(1.0));
-    vec2 center = cursor.xy + halfSize;
+    vec2 center = cursor.xy + vec2(halfSize.x, -halfSize.y);
     vec2 edgeDistance = abs(fragCoord - center) - halfSize;
     float distance = length(max(edgeDistance, 0.0))
         + min(max(edgeDistance.x, edgeDistance.y), 0.0);

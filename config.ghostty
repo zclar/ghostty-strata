@@ -42,8 +42,8 @@ cursor-color = #ffaa20
 cursor-text = #100902
 bell-features = no-system,no-audio,attention,title,no-border
 
-# Switchable effect profile. Run ./profile.sh glow-on or glow-off.
-config-file = profiles/active.ghostty
+# Switchable effect profile. Ghostty hot-reloads this installed shader file.
+custom-shader = shaders/active.glsl
 custom-shader-animation = true
 
 # Keep splits and overlays inside the Amber Strata visual system.
@@ -57,3 +57,7 @@ resize-overlay-duration = 350ms
 # Familiar controls used by the earlier WezTerm version.
 keybind = ctrl+w=close_tab
 keybind = ctrl+shift+p=toggle_command_palette
+
+# UI-accessible profile controls. Use these from a normal shell prompt.
+command-palette-entry = title:"Amber Strata: Glow On",description:"Enable phosphor glow (run at a shell prompt).",action:"text:~/.config/ghostty/profile.sh glow-on\n"
+command-palette-entry = title:"Amber Strata: Glow Off",description:"Disable phosphor glow (run at a shell prompt).",action:"text:~/.config/ghostty/profile.sh glow-off\n"

@@ -92,8 +92,13 @@ animated block cursor; `glow-off` removes character glow and the typing pulse.
 ./profile.sh glow-off
 ```
 
-Reload Ghostty with `Ctrl+Shift+,` after switching. The active selection lives
-under `~/.config/ghostty`, so changing profiles does not dirty the Git checkout.
+You can also press `Ctrl+Shift+P` inside Ghostty and choose **Amber Strata: Glow
+On** or **Amber Strata: Glow Off** while at a normal shell prompt. Ghostty does
+not expose an action that executes a profile switch directly, so the palette
+entry enters the installed command into that prompt. The switch updates the
+installed `shaders/active.glsl`, which Ghostty hot-reloads immediately. The
+active selection lives under `~/.config/ghostty`, so switching does not dirty
+the Git checkout.
 Clearly labeled constants at the top control sharpness, character glow, and
 cursor afterglow.
 
@@ -123,8 +128,10 @@ backup if one was made:
 
 ```bash
 rm ~/.config/ghostty/config.ghostty
+rm ~/.config/ghostty/profile.sh
 rm ~/.config/ghostty/themes/'Amber Strata'
 rm ~/.config/ghostty/shaders/amber-strata.glsl
+rm ~/.config/ghostty/shaders/active.glsl
 rm ~/.config/ghostty/shaders/cursor-pulse.glsl
 rm ~/.config/ghostty/shaders/classic-crt.glsl
 rm ~/.config/ghostty/styles/amber-strata.css

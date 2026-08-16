@@ -11,7 +11,7 @@ const float CURSOR_MAX_OPACITY = 1.0;
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
     vec2 halfSize = max(cursor.zw * 0.5, vec2(1.0));
-    vec2 center = cursor.xy + halfSize;
+    vec2 center = cursor.xy + vec2(halfSize.x, -halfSize.y);
     vec2 edgeDistance = abs(fragCoord - center) - halfSize;
     float distance = length(max(edgeDistance, 0.0))
         + min(max(edgeDistance.x, edgeDistance.y), 0.0);
@@ -90,7 +90,10 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
 
     // Cursor movement accompanies normal typing. Briefly energize the newly
     // written area, then let it fall away like phosphor afterglow.
-    vec2 pulseCenter = iCurrentCursor.xy + iCurrentCursor.zw * 0.5;
+    vec2 pulseCenter = vec2(
+        iCurrentCursor.x + iCurrentCursor.z * 0.5,
+        iCurrentCursor.y - iCurrentCursor.w * 0.5
+    );
     float pulseDistance = length((fragCoord - pulseCenter)
         / vec2(TYPE_PULSE_RADIUS, TYPE_PULSE_RADIUS * 0.72));
     float pulseShape = exp(-pulseDistance * pulseDistance * 2.4);
