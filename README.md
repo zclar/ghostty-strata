@@ -72,9 +72,11 @@ ghostty --config-file="$(pwd)/themes/Amber Strata"
 
 ## Clean and classic effects
 
-The default shader is deliberately clean: no noise, scanlines, flicker,
-vignette, distortion, or artificial contrast. Clearly labeled constants at
-the top control only character glow and cursor afterglow.
+The default shader is deliberately clean and crisp: no noise, scanlines,
+flicker, vignette, distortion, or artificial contrast. A restrained sharpen
+pass preserves the glyph core before the tight phosphor halo is applied.
+Clearly labeled constants at the top control sharpness, character glow, and
+cursor afterglow.
 
 For an aged CRT appearance, add this directly after the default shader in
 `config.ghostty`:
