@@ -30,6 +30,7 @@ link_file() {
 link_file "$repo_dir/config.ghostty" "$config_dir/config.ghostty"
 link_file "$repo_dir/profile.sh" "$config_dir/profile.sh"
 link_file "$repo_dir/font-profile.sh" "$config_dir/font-profile.sh"
+link_file "$repo_dir/settings.py" "$config_dir/settings.py"
 link_file "$repo_dir/themes/Amber Strata" "$config_dir/themes/Amber Strata"
 link_file "$repo_dir/shaders/amber-strata.glsl" "$config_dir/shaders/amber-strata.glsl"
 link_file "$repo_dir/shaders/cursor-pulse.glsl" "$config_dir/shaders/cursor-pulse.glsl"
@@ -45,6 +46,11 @@ if [[ ! -e "$config_dir/font.ghostty" ]]; then
     printf 'font-family = Terminus (TTF)\nfont-style = Medium\nfont-thicken = true\nfont-thicken-strength = 165\nadjust-cell-width = -6%%\n' > "$config_dir/font.ghostty"
 fi
 fc-cache -f "$font_dir"
+
+applications_dir="${XDG_DATA_HOME:-${HOME:?}/.local/share}/applications"
+mkdir -p "$applications_dir"
+printf '[Desktop Entry]\nType=Application\nName=Amber Strata Settings\nComment=Configure the Amber Strata Ghostty theme\nExec=python3 %s/settings.py\nTerminal=false\nCategories=Settings;Utility;\n' \
+    "$config_dir" > "$applications_dir/amber-strata-settings.desktop"
 
 if [[ ! -e "$config_dir/shaders/active.glsl" ]]; then
     profile_contents="$(<"$repo_dir/shaders/amber-strata.glsl")"

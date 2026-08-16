@@ -67,3 +67,4 @@ command-palette-entry = title:"Amber Strata Font: Terminus",description:"Use the
 command-palette-entry = title:"Amber Strata Font: Strata Dot",description:"Use the round matrix face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh dot\n"
 command-palette-entry = title:"Amber Strata Font: Strata Square",description:"Use the square matrix face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh square\n"
 command-palette-entry = title:"Amber Strata Font: Strata Matrix",description:"Use the coarse 5x7 dot face (run at a shell prompt).",action:"text:~/.config/ghostty/font-profile.sh matrix\n"
+command-palette-entry = title:"Amber Strata: Open Settings",description:"Open the visual Amber Strata control panel (run at a shell prompt).",action:"text:~/.config/ghostty/settings.py\n"

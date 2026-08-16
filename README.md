@@ -126,6 +126,23 @@ python3 -m pip install -r fonts/requirements.txt
 python3 fonts/build_fonts.py
 ```
 
+## Visual settings
+
+Run **Amber Strata Settings** from the KDE application launcher, select **Amber
+Strata: Open Settings** from Ghostty's `Ctrl+Shift+P` palette while at a shell
+prompt, or run:
+
+```bash
+~/.config/ghostty/settings.py
+```
+
+The panel provides a live type preview, font selection, size and Terminus
+thickness controls, and an instant glow toggle. **Apply + Open Ghostty Preview**
+opens a new terminal with the saved settings. Ghostty 1.3 does not expose its
+surface-level `reload_config` action to external applications, so existing
+windows still require one `Ctrl+Shift+,` after a font or metric change; shader
+changes hot-reload immediately.
+
 Clearly labeled constants at the top control sharpness, character glow, and
 cursor afterglow.
 
@@ -158,6 +175,7 @@ rm ~/.config/ghostty/config.ghostty
 rm ~/.config/ghostty/profile.sh
 rm ~/.config/ghostty/font-profile.sh
 rm ~/.config/ghostty/font.ghostty
+rm ~/.config/ghostty/settings.py
 rm ~/.config/ghostty/themes/'Amber Strata'
 rm ~/.config/ghostty/shaders/amber-strata.glsl
 rm ~/.config/ghostty/shaders/active.glsl
@@ -170,6 +188,7 @@ rm ~/.config/ghostty/profiles/glow-off.ghostty
 rm ~/.local/share/fonts/amber-strata/StrataDot-Regular.ttf
 rm ~/.local/share/fonts/amber-strata/StrataSquare-Regular.ttf
 rm ~/.local/share/fonts/amber-strata/StrataMatrix-Regular.ttf
+rm ~/.local/share/applications/amber-strata-settings.desktop
 ```
 
 ## License
