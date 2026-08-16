@@ -43,7 +43,7 @@ link_file "$repo_dir/fonts/dist/StrataSquare-Regular.ttf" "$font_dir/StrataSquar
 link_file "$repo_dir/fonts/dist/StrataMatrix-Regular.ttf" "$font_dir/StrataMatrix-Regular.ttf"
 
 if [[ ! -e "$config_dir/font.ghostty" ]]; then
-    printf 'font-family =\nfont-family = Terminus (TTF)\nfont-style = Medium\nfont-thicken = true\nfont-thicken-strength = 165\nadjust-cell-width = -6%%\n' > "$config_dir/font.ghostty"
+    printf 'font-family = Terminus (TTF)\nfont-style = Medium\nfont-thicken = true\nfont-thicken-strength = 165\nadjust-cell-width = -6%%\n' > "$config_dir/font.ghostty"
 fi
 fc-cache -f "$font_dir"
 

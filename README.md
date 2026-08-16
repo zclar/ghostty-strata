@@ -107,9 +107,6 @@ uses a fine 7×11 round-node grid, **Strata Square** uses softly rounded cells,
 and **Strata Matrix** uses a coarse, widely spaced 5×7 display rhythm inspired
 by modern dot-matrix industrial design. Terminus remains the default.
 
-Strata Dot is also used throughout the themed Ghostty GTK shell—tabs, menus,
-buttons, fields, and tooltips—so the visual language extends beyond the grid.
-
 ```bash
 ./font-profile.sh dot
 ./font-profile.sh square
