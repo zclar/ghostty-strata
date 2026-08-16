@@ -1,7 +1,7 @@
 // Amber Strata Clean: modern phosphor glow without CRT aging artifacts.
 const float SHARPNESS = 0.20;
-const float INNER_GLOW = 0.27;
-const float OUTER_GLOW = 0.13;
+const float INNER_GLOW = 0.58;
+const float OUTER_GLOW = 0.48;
 const float TRAIL_STRENGTH = 0.20;
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
@@ -52,20 +52,24 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     inner *= 0.125;
 
     vec3 outer = vec3(0.0);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 4.5,  0.0) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2(-4.5,  0.0) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 0.0,  4.5) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 0.0, -4.5) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 3.2,  3.2) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2(-3.2,  3.2) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2( 3.2, -3.2) * px).rgb);
-    outer += luminousPart(texture(iChannel0, uv + vec2(-3.2, -3.2) * px).rgb);
+    outer += luminousPart(texture(iChannel0, uv + vec2( 3.5,  0.0) * px).rgb);
+    outer += luminousPart(texture(iChannel0, uv + vec2(-3.5,  0.0) * px).rgb);
+    outer += luminousPart(texture(iChannel0, uv + vec2( 0.0,  3.5) * px).rgb);
+    outer += luminousPart(texture(iChannel0, uv + vec2( 0.0, -3.5) * px).rgb);
+    outer += luminousPart(texture(iChannel0, uv + vec2( 2.5,  2.5) * px).rgb);
+    outer += luminousPart(texture(iChannel0, uv + vec2(-2.5,  2.5) * px).rgb);
+    outer += luminousPart(texture(iChannel0, uv + vec2( 2.5, -2.5) * px).rgb);
+    outer += luminousPart(texture(iChannel0, uv + vec2(-2.5, -2.5) * px).rgb);
     outer *= 0.125;
 
-    vec3 amberGlow = vec3(1.0, 0.48, 0.09);
+    // Put the glow primarily into dark pixels around the glyph. The bright
+    // core stays sharpened instead of being blurred or overexposed.
+    float core = smoothstep(0.025, 0.22, glyphEnergy);
+    float haloSpace = 1.0 - core * 0.82;
+    vec3 amberGlow = vec3(1.0, 0.54, 0.12);
     vec3 color = crispSource;
-    color += inner * amberGlow * INNER_GLOW;
-    color += outer * amberGlow * OUTER_GLOW;
+    color += inner * amberGlow * INNER_GLOW * haloSpace;
+    color += outer * amberGlow * OUTER_GLOW * haloSpace;
 
     float age = max(iTime - iTimeCursorChange, 0.0);
     float previous = cursorMask(fragCoord, iPreviousCursor);
