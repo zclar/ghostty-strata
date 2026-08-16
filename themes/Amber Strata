@@ -5,7 +5,7 @@ bold-color = #ef871e
 faint-opacity = 0.53
 
 cursor-color = #ffaa20
-cursor-text = #100902
+cursor-text = #ea851d
 # Konsole's implicit selection behavior is a true foreground/background flip.
 selection-foreground = #100902
 selection-background = #ea851d

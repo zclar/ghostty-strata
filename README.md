@@ -26,6 +26,11 @@ neutral gray, which brings TUI input panels such as the Codex composer into the
 same palette. The shader excludes that low-energy surface from glyph bloom so
 the panel remains crisp.
 
+Codex currently emits its composer as a fixed RGB surface rather than an ANSI
+palette color. Both Amber Strata shaders selectively re-tone that low-chroma
+mid-dark panel to the theme surface. The animated cursor preserves the source
+glyph while faded out and explicitly draws its dark inverse inside the block.
+
 ## Requirements
 
 - Ghostty 1.2.0 or newer (cursor shader uniforms were added in 1.2)

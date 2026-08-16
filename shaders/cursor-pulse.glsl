@@ -12,10 +12,22 @@ float cursorMask(vec2 fragCoord, vec4 cursor) {
     return 1.0 - smoothstep(-1.0, 3.0, distance);
 }
 
+vec3 themedTuiSurface(vec3 sampleColor) {
+    float high = max(sampleColor.r, max(sampleColor.g, sampleColor.b));
+    float low = min(sampleColor.r, min(sampleColor.g, sampleColor.b));
+    float chroma = high - low;
+    float luminance = dot(sampleColor, vec3(0.2126, 0.7152, 0.0722));
+    float neutral = 1.0 - smoothstep(0.035, 0.10, chroma);
+    float midDark = smoothstep(0.09, 0.14, luminance)
+        * (1.0 - smoothstep(0.23, 0.32, luminance));
+    return mix(sampleColor, vec3(0.106, 0.059, 0.016), neutral * midDark * 0.94);
+}
+
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec2 uv = fragCoord / iResolution.xy;
     vec4 source = texture(iChannel0, uv);
-    vec3 delta = max(source.rgb - iBackgroundColor, vec3(0.0));
+    vec3 themedSource = themedTuiSurface(source.rgb);
+    vec3 delta = max(themedSource - iBackgroundColor, vec3(0.0));
     float glyphEnergy = max(delta.r, max(delta.g, delta.b));
 
     float cursorWave = 0.5 + 0.5 * sin(
@@ -29,9 +41,9 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     );
 
     float cursorGlyph = smoothstep(0.035, 0.22, glyphEnergy);
-    vec3 cursorSurface = mix(iCursorColor, iCursorText, cursorGlyph);
+    vec3 cursorSurface = mix(iCursorColor, iBackgroundColor, cursorGlyph);
     float cursorCoverage = cursorMask(fragCoord, iCurrentCursor)
         * cursorOpacity * float(iCursorVisible.x);
-    vec3 color = mix(source.rgb, cursorSurface, cursorCoverage);
+    vec3 color = mix(themedSource, cursorSurface, cursorCoverage);
     fragColor = vec4(color, source.a);
 }

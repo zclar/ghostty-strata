@@ -27,23 +27,38 @@ vec3 luminousPart(vec3 sampleColor) {
     return delta * smoothstep(0.10, 0.30, energy);
 }
 
+vec3 themedTuiSurface(vec3 sampleColor) {
+    // Codex draws its composer with a fixed low-chroma RGB surface rather than
+    // ANSI color 8. Re-tone only mid-dark neutral panels; preserve the true
+    // terminal background, amber glyphs, and bright neutral text.
+    float high = max(sampleColor.r, max(sampleColor.g, sampleColor.b));
+    float low = min(sampleColor.r, min(sampleColor.g, sampleColor.b));
+    float chroma = high - low;
+    float luminance = dot(sampleColor, vec3(0.2126, 0.7152, 0.0722));
+    float neutral = 1.0 - smoothstep(0.035, 0.10, chroma);
+    float midDark = smoothstep(0.09, 0.14, luminance)
+        * (1.0 - smoothstep(0.23, 0.32, luminance));
+    return mix(sampleColor, vec3(0.106, 0.059, 0.016), neutral * midDark * 0.94);
+}
+
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec2 uv = fragCoord / iResolution.xy;
     vec2 px = 1.0 / iResolution.xy;
     vec4 source = texture(iChannel0, uv);
+    vec3 themedSource = themedTuiSurface(source.rgb);
 
     // Restore a defined glyph core before adding light around it. This is a
     // restrained four-neighbor unsharp mask, gated to avoid ringing in the UI.
     vec3 adjacent = vec3(0.0);
-    adjacent += texture(iChannel0, uv + vec2( 1.0,  0.0) * px).rgb;
-    adjacent += texture(iChannel0, uv + vec2(-1.0,  0.0) * px).rgb;
-    adjacent += texture(iChannel0, uv + vec2( 0.0,  1.0) * px).rgb;
-    adjacent += texture(iChannel0, uv + vec2( 0.0, -1.0) * px).rgb;
+    adjacent += themedTuiSurface(texture(iChannel0, uv + vec2( 1.0,  0.0) * px).rgb);
+    adjacent += themedTuiSurface(texture(iChannel0, uv + vec2(-1.0,  0.0) * px).rgb);
+    adjacent += themedTuiSurface(texture(iChannel0, uv + vec2( 0.0,  1.0) * px).rgb);
+    adjacent += themedTuiSurface(texture(iChannel0, uv + vec2( 0.0, -1.0) * px).rgb);
     adjacent *= 0.25;
-    vec3 detail = source.rgb - adjacent;
-    vec3 sourceLight = luminousPart(source.rgb);
+    vec3 detail = themedSource - adjacent;
+    vec3 sourceLight = luminousPart(themedSource);
     float glyphEnergy = max(sourceLight.r, max(sourceLight.g, sourceLight.b));
-    vec3 crispSource = max(source.rgb + detail * SHARPNESS
+    vec3 crispSource = max(themedSource + detail * SHARPNESS
         * smoothstep(0.02, 0.16, glyphEnergy), vec3(0.0));
 
     // A fractional-pixel 5x5 Gaussian produces a continuous halo. Bilinear
@@ -86,7 +101,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
         cursorWave
     );
     float cursorGlyph = smoothstep(0.035, 0.22, glyphEnergy);
-    vec3 cursorSurface = mix(iCursorColor, iCursorText, cursorGlyph);
+    vec3 cursorSurface = mix(iCursorColor, iBackgroundColor, cursorGlyph);
     float cursorCoverage = current * cursorOpacity * float(iCursorVisible.x);
     color = mix(color, cursorSurface, cursorCoverage);
 
