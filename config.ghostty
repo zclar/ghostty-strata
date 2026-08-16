@@ -35,7 +35,7 @@ background-blur = false
 
 # Native cursor and bell behavior; the shader supplies the motion trail.
 cursor-style = block
-cursor-style-blink = true
+cursor-style-blink = false
 cursor-color = #ffaa20
 cursor-text = #100902
 bell-features = no-system,no-audio,attention,title,no-border
