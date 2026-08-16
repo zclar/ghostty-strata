@@ -78,8 +78,22 @@ pass preserves the glyph core before a fractional-pixel Gaussian phosphor halo
 is applied, avoiding pixelated rings around curved and diagonal characters.
 Cursor movement triggers a localized phosphor pulse, giving typed characters a
 brief ignition and smooth afterglow instead of a simple cursor smear.
-The active cursor remains a solid block and breathes smoothly in luminance;
-native hard blinking is disabled so the cursor never abruptly disappears.
+The active cursor is shader-drawn as a solid block and breathes smoothly from
+fully transparent to fully opaque; Ghostty's native cursor is transparent and
+hard blinking is disabled so the animation remains continuous.
+
+## Toggle the glow
+
+Two settings profiles are included. Both retain the Amber interface and the
+animated block cursor; `glow-off` removes character glow and the typing pulse.
+
+```bash
+./profile.sh glow-on
+./profile.sh glow-off
+```
+
+Reload Ghostty with `Ctrl+Shift+,` after switching. The active selection lives
+under `~/.config/ghostty`, so changing profiles does not dirty the Git checkout.
 Clearly labeled constants at the top control sharpness, character glow, and
 cursor afterglow.
 
@@ -111,8 +125,12 @@ backup if one was made:
 rm ~/.config/ghostty/config.ghostty
 rm ~/.config/ghostty/themes/'Amber Strata'
 rm ~/.config/ghostty/shaders/amber-strata.glsl
+rm ~/.config/ghostty/shaders/cursor-pulse.glsl
 rm ~/.config/ghostty/shaders/classic-crt.glsl
 rm ~/.config/ghostty/styles/amber-strata.css
+rm ~/.config/ghostty/profiles/active.ghostty
+rm ~/.config/ghostty/profiles/glow-on.ghostty
+rm ~/.config/ghostty/profiles/glow-off.ghostty
 ```
 
 ## License

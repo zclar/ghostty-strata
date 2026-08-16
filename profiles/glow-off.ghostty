@@ -1,0 +1,2 @@
+# Crisp Amber Strata text with only the animated block cursor.
+custom-shader = ../shaders/cursor-pulse.glsl

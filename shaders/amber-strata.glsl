@@ -6,7 +6,8 @@ const float TYPE_PULSE_STRENGTH = 0.48;
 const float TYPE_PULSE_RADIUS = 34.0;
 const float TRAIL_STRENGTH = 0.14;
 const float CURSOR_PULSE_SECONDS = 1.45;
-const float CURSOR_DIM_LEVEL = 0.68;
+const float CURSOR_MIN_OPACITY = 0.0;
+const float CURSOR_MAX_OPACITY = 1.0;
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
     vec2 halfSize = max(cursor.zw * 0.5, vec2(1.0));
@@ -71,14 +72,21 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float previous = cursorMask(fragCoord, iPreviousCursor);
     float current = cursorMask(fragCoord, iCurrentCursor);
 
-    // A modern solid-block cursor with a smooth breathing luminance. Scaling
-    // the rendered block preserves Ghostty's dark cursor text at every phase.
+    // Ghostty's native cursor is transparent; draw the complete block here so
+    // its actual opacity can breathe rather than merely changing brightness.
     float cursorWave = 0.5 + 0.5 * sin(
         iTime * 6.28318530718 / CURSOR_PULSE_SECONDS - 1.57079632679
     );
     cursorWave = cursorWave * cursorWave * (3.0 - 2.0 * cursorWave);
-    float cursorLuminance = mix(CURSOR_DIM_LEVEL, 1.08, cursorWave);
-    color *= mix(1.0, cursorLuminance, current * float(iCursorVisible.x));
+    float cursorOpacity = mix(
+        CURSOR_MIN_OPACITY,
+        CURSOR_MAX_OPACITY,
+        cursorWave
+    );
+    float cursorGlyph = smoothstep(0.035, 0.22, glyphEnergy);
+    vec3 cursorSurface = mix(iCursorColor, iCursorText, cursorGlyph);
+    float cursorCoverage = current * cursorOpacity * float(iCursorVisible.x);
+    color = mix(color, cursorSurface, cursorCoverage);
 
     // Cursor movement accompanies normal typing. Briefly energize the newly
     // written area, then let it fall away like phosphor afterglow.

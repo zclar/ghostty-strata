@@ -36,13 +36,14 @@ background-blur = false
 # Native cursor and bell behavior; the shader supplies the motion trail.
 cursor-style = block
 cursor-style-blink = false
+# The shader draws the visible cursor so it can animate true block opacity.
+cursor-opacity = 0
 cursor-color = #ffaa20
 cursor-text = #100902
 bell-features = no-system,no-audio,attention,title,no-border
 
-# Clean phosphor glow is the default. The optional classic CRT shader adds
-# scanlines, flicker, grain, and a vignette for users who want those artifacts.
-custom-shader = shaders/amber-strata.glsl
+# Switchable effect profile. Run ./profile.sh glow-on or glow-off.
+config-file = profiles/active.ghostty
 custom-shader-animation = true
 
 # Keep splits and overlays inside the Amber Strata visual system.

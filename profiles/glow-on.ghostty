@@ -1,0 +1,2 @@
+# Full Amber Strata phosphor glow, typing pulse, and animated block cursor.
+custom-shader = ../shaders/amber-strata.glsl
