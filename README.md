@@ -143,6 +143,12 @@ surface-level `reload_config` action to external applications, so existing
 windows still require one `Ctrl+Shift+,` after a font or metric change; shader
 changes hot-reload immediately.
 
+The panel's large Amber Strata identity uses the finer Strata Dot display face
+with open letter spacing. Ghostty does not provide a configuration or CSS hook for inserting a new
+button into its native titlebar; doing that requires maintaining a custom build
+of Ghostty itself. The settings panel remains available from the KDE launcher
+and Ghostty command palette without forking the terminal.
+
 Clearly labeled constants at the top control sharpness, character glow, and
 cursor afterglow.
 

@@ -78,7 +78,13 @@ class Settings(tk.Tk):
         style.configure("TFrame", background=BG)
         style.configure("Card.TFrame", background=SURFACE)
         style.configure("TLabel", background=BG, foreground=TEXT, font=("Sans", 10))
-        style.configure("Title.TLabel", foreground=BRIGHT, font=("Sans", 20, "bold"))
+        # The finer 7x11 face retains detail at display size. Explicit tracking
+        # keeps the identity open and technical instead of horizontally cramped.
+        style.configure(
+            "Title.TLabel",
+            foreground=BRIGHT,
+            font=("Strata Dot", 25, "normal"),
+        )
         style.configure("Muted.TLabel", foreground=MUTED)
         style.configure("Card.TLabel", background=SURFACE, foreground=TEXT)
         style.configure("TRadiobutton", background=SURFACE, foreground=TEXT)
@@ -91,7 +97,26 @@ class Settings(tk.Tk):
     def _build(self) -> None:
         root = ttk.Frame(self, padding=24)
         root.pack(fill="both", expand=True)
-        ttk.Label(root, text="AMBER STRATA", style="Title.TLabel").pack(anchor="w")
+        identity = tk.Canvas(
+            root,
+            height=45,
+            bg=BG,
+            highlightthickness=0,
+            borderwidth=0,
+        )
+        identity.pack(fill="x", anchor="w")
+        identity_font = tkfont.Font(family="Strata Dot", size=25)
+        identity_x = 0
+        for character in "AMBER STRATA":
+            identity.create_text(
+                identity_x,
+                2,
+                text=character,
+                anchor="nw",
+                fill=BRIGHT,
+                font=identity_font,
+            )
+            identity_x += identity_font.measure(character) + 3
         ttk.Label(
             root,
             text="Modern phosphor terminal controls",
