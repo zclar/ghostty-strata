@@ -31,6 +31,8 @@ BORDER = "#6a3c0d"
 TEXT = "#ea851d"
 BRIGHT = "#ffb840"
 MUTED = "#a96318"
+PANEL = "#160c03"
+DIM = "#3a2108"
 
 
 def parse_config() -> dict[str, str]:
@@ -70,6 +72,7 @@ class Settings(tk.Tk):
         )
         self.glow = tk.BooleanVar(value=glow_enabled)
         self.status = tk.StringVar(value="Changes preview here immediately.")
+        self.identity_phase = 0
 
         self._styles()
         self._build()
@@ -79,8 +82,8 @@ class Settings(tk.Tk):
         style = ttk.Style(self)
         style.theme_use("clam")
         style.configure("TFrame", background=BG)
-        style.configure("Card.TFrame", background=SURFACE)
-        style.configure("TLabel", background=BG, foreground=TEXT, font=("Sans", 10))
+        style.configure("Card.TFrame", background=SURFACE, borderwidth=1, relief="solid")
+        style.configure("TLabel", background=BG, foreground=TEXT, font=("DM Mono", 10))
         # The finer 7x11 face retains detail at display size. Explicit tracking
         # keeps the identity open and technical instead of horizontally cramped.
         style.configure(
@@ -89,6 +92,17 @@ class Settings(tk.Tk):
             font=("Strata Dot", 25, "normal"),
         )
         style.configure("Muted.TLabel", foreground=MUTED)
+        style.configure(
+            "Section.TLabel",
+            background=SURFACE,
+            foreground=BRIGHT,
+            font=("DM Mono", 9, "bold"),
+        )
+        style.configure(
+            "Status.TLabel",
+            foreground=MUTED,
+            font=("DM Mono", 9),
+        )
         style.configure("Card.TLabel", background=SURFACE, foreground=TEXT)
         style.configure("TRadiobutton", background=SURFACE, foreground=TEXT)
         style.map("TRadiobutton", background=[("active", SURFACE)], foreground=[("active", BRIGHT)])
@@ -96,18 +110,27 @@ class Settings(tk.Tk):
         style.map("TCheckbutton", background=[("active", SURFACE)], foreground=[("active", BRIGHT)])
         style.configure("TButton", background=SURFACE, foreground=BRIGHT, bordercolor=BORDER, padding=(12, 8))
         style.map("TButton", background=[("active", "#2b1806")])
+        style.configure(
+            "Accent.TButton",
+            background=TEXT,
+            foreground=BG,
+            bordercolor=BRIGHT,
+            padding=(15, 9),
+        )
+        style.map("Accent.TButton", background=[("active", BRIGHT)])
 
     def _build(self) -> None:
         root = ttk.Frame(self, padding=24)
         root.pack(fill="both", expand=True)
         identity = tk.Canvas(
             root,
-            height=45,
+            height=70,
             bg=BG,
             highlightthickness=0,
             borderwidth=0,
         )
         identity.pack(fill="x", anchor="w")
+        self.identity_canvas = identity
         identity_font = tkfont.Font(family="Strata Dot", size=25)
         identity_x = 0
         for character in "AMBER STRATA":
@@ -120,15 +143,30 @@ class Settings(tk.Tk):
                 font=identity_font,
             )
             identity_x += identity_font.measure(character) + 3
+        identity.create_text(
+            728,
+            6,
+            text="◫  01",
+            anchor="ne",
+            fill=MUTED,
+            font=("DM Mono", 10, "bold"),
+        )
+        self.identity_dots = []
+        for index in range(28):
+            x = 4 + index * 12
+            dot = identity.create_oval(x, 53, x + 4, 57, fill=DIM, outline="")
+            self.identity_dots.append(dot)
+        identity.create_line(348, 55, 724, 55, fill=DIM, width=1)
+        self.after(80, self._animate_identity)
         ttk.Label(
             root,
-            text="Modern phosphor terminal controls",
+            text="SYSTEM / PHOSPHOR INTERFACE / LIVE",
             style="Muted.TLabel",
         ).pack(anchor="w", pady=(0, 18))
 
         card = ttk.Frame(root, style="Card.TFrame", padding=18)
         card.pack(fill="x")
-        ttk.Label(card, text="Typeface", style="Card.TLabel").grid(row=0, column=0, sticky="w", columnspan=2)
+        ttk.Label(card, text="01  /  TYPE SYSTEM", style="Section.TLabel").grid(row=0, column=0, sticky="w", columnspan=2, pady=(0, 7))
         for index, label in enumerate(FONTS, start=1):
             ttk.Radiobutton(
                 card,
@@ -174,7 +212,7 @@ class Settings(tk.Tk):
 
         effects = ttk.Frame(root, style="Card.TFrame", padding=18)
         effects.pack(fill="x", pady=12)
-        ttk.Label(effects, text="Effects", style="Card.TLabel").pack(anchor="w")
+        ttk.Label(effects, text="02  /  SIGNAL + MOTION", style="Section.TLabel").pack(anchor="w")
         ttk.Checkbutton(
             effects,
             text="Phosphor character glow and typing pulse",
@@ -184,10 +222,10 @@ class Settings(tk.Tk):
 
         preview_card = ttk.Frame(root, style="Card.TFrame", padding=18)
         preview_card.pack(fill="both", expand=True)
-        ttk.Label(preview_card, text="Live type preview", style="Card.TLabel").pack(anchor="w")
+        ttk.Label(preview_card, text="03  /  LIVE GLYPH PREVIEW", style="Section.TLabel").pack(anchor="w")
         self.preview = tk.Label(
             preview_card,
-            text="AMBER STRATA 03\nThe quick brown fox 0123456789\n$ glow --modern",
+            text="AMBER STRATA 03   ◫ ◇ ⌁\nThe quick brown fox 0123456789\n> glow --modern   [ SIGNAL READY ]",
             justify="left",
             anchor="w",
             bg=BG,
@@ -199,10 +237,22 @@ class Settings(tk.Tk):
 
         buttons = ttk.Frame(root)
         buttons.pack(fill="x", pady=(14, 0))
-        ttk.Button(buttons, text="Apply", command=self._apply).pack(side="left")
+        ttk.Button(buttons, text="Apply", command=self._apply, style="Accent.TButton").pack(side="left")
         ttk.Button(buttons, text="Apply + Open Ghostty Preview", command=self._open_preview).pack(side="left", padx=8)
         ttk.Button(buttons, text="Close", command=self.destroy).pack(side="right")
-        ttk.Label(root, textvariable=self.status, style="Muted.TLabel").pack(anchor="w", pady=(10, 0))
+        ttk.Label(root, textvariable=self.status, style="Status.TLabel").pack(anchor="w", pady=(10, 0))
+
+    def _animate_identity(self) -> None:
+        """Run a restrained Nothing-inspired signal sweep in the header."""
+        if not self.winfo_exists():
+            return
+        count = len(self.identity_dots)
+        for index, dot in enumerate(self.identity_dots):
+            distance = (index - self.identity_phase) % count
+            color = BRIGHT if distance == 0 else TEXT if distance in (1, count - 1) else DIM
+            self.identity_canvas.itemconfigure(dot, fill=color)
+        self.identity_phase = (self.identity_phase + 1) % count
+        self.after(90, self._animate_identity)
 
     def _update_preview(self) -> None:
         family = FONTS[self.font_choice.get()][0]

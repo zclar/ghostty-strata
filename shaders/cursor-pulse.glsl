@@ -12,6 +12,24 @@ float cursorMask(vec2 fragCoord, vec4 cursor) {
     return 1.0 - smoothstep(-1.0, 3.0, distance);
 }
 
+vec2 cursorCenter(vec4 cursor) {
+    return cursor.xy + vec2(cursor.z * 0.5, -cursor.w * 0.5);
+}
+
+float matrixCursorTrail(vec2 fragCoord) {
+    vec2 from = cursorCenter(iPreviousCursor);
+    vec2 to = cursorCenter(iCurrentCursor);
+    float moved = smoothstep(2.0, 8.0, length(to - from));
+    float trail = 0.0;
+    for (int index = 1; index <= 6; ++index) {
+        float position = float(index) / 7.0;
+        vec2 node = mix(from, to, position);
+        float nodeMask = 1.0 - smoothstep(1.1, 2.5, length(fragCoord - node));
+        trail += nodeMask * (1.0 - position * 0.58);
+    }
+    return min(trail, 1.0) * moved;
+}
+
 vec3 themedTuiSurface(vec3 sampleColor) {
     float high = max(sampleColor.r, max(sampleColor.g, sampleColor.b));
     float low = min(sampleColor.r, min(sampleColor.g, sampleColor.b));
@@ -45,5 +63,9 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float cursorCoverage = cursorMask(fragCoord, iCurrentCursor)
         * cursorOpacity * float(iCursorVisible.x);
     vec3 color = mix(themedSource, cursorSurface, cursorCoverage);
+    float age = max(iTime - iTimeCursorChange, 0.0);
+    float matrixTrail = matrixCursorTrail(fragCoord)
+        * exp(-age * 11.0) * float(iFocus);
+    color += vec3(1.0, 0.54, 0.12) * matrixTrail * 0.62;
     fragColor = vec4(color, source.a);
 }

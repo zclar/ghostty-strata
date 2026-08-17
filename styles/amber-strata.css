@@ -6,6 +6,8 @@
 @define-color strata_muted #a96318;
 @define-color strata_text #ea851d;
 @define-color strata_bright #ffb840;
+@define-color strata_dim #3a2108;
+@define-color strata_panel #160c03;
 
 window,
 window.background,
@@ -19,18 +21,28 @@ tabbox {
 
 headerbar,
 .titlebar {
-  min-height: 36px;
-  padding: 0 5px;
-  border-bottom: 1px solid alpha(@strata_border, 0.42);
-  box-shadow: none;
+  min-height: 40px;
+  padding: 0 7px;
+  background-color: @strata_panel;
+  border-top: 1px solid alpha(@strata_text, 0.16);
+  border-bottom: 1px solid alpha(@strata_border, 0.72);
+  box-shadow: inset 0 -1px alpha(@strata_bg, 0.85);
+}
+
+headerbar windowtitle,
+.titlebar windowtitle {
+  color: @strata_muted;
+  font-weight: 500;
+  letter-spacing: 1px;
 }
 
 tabbar tab,
 tabbox tab {
-  min-height: 28px;
-  margin: 3px 2px;
-  padding: 0 9px;
-  border-radius: 5px;
+  min-height: 30px;
+  margin: 4px 3px;
+  padding: 0 11px;
+  border: 1px solid transparent;
+  border-radius: 7px;
   background-color: transparent;
   color: @strata_muted;
   box-shadow: none;
@@ -40,19 +52,30 @@ tabbar tab:hover,
 tabbox tab:hover {
   background-color: @strata_surface_hover;
   color: @strata_bright;
+  border-color: alpha(@strata_border, 0.72);
 }
 
 tabbar tab:checked,
 tabbox tab:checked,
 tabbar tab:selected,
 tabbox tab:selected {
-  background-color: @strata_surface;
+  background-color: @strata_surface_hover;
   color: @strata_bright;
-  box-shadow: none;
+  border-color: @strata_border;
+  box-shadow: inset 0 -2px @strata_text;
+}
+
+tabbar tab:checked label,
+tabbox tab:checked label,
+tabbar tab:selected label,
+tabbox tab:selected label {
+  font-weight: 600;
+  letter-spacing: 0.6px;
 }
 
 button {
-  border-radius: 5px;
+  border: 1px solid transparent;
+  border-radius: 7px;
   color: @strata_muted;
   background-color: transparent;
   background-image: none;
@@ -62,12 +85,12 @@ button {
 headerbar button,
 .titlebar button,
 tabbar button {
-  min-width: 24px;
-  min-height: 24px;
+  min-width: 26px;
+  min-height: 26px;
   margin: 2px;
   padding: 2px;
-  border: 0;
-  border-radius: 5px;
+  border: 1px solid transparent;
+  border-radius: 7px;
   background-color: transparent;
   background-image: none;
 }
@@ -81,12 +104,15 @@ tabbar button.circular {
 button:hover {
   color: @strata_bright;
   background-color: @strata_surface_hover;
+  border-color: @strata_border;
 }
 
 button:active,
 button:checked {
-  color: @strata_bright;
-  background-color: @strata_surface_hover;
+  color: @strata_bg;
+  background-color: @strata_text;
+  border-color: @strata_bright;
+  box-shadow: inset 0 0 0 1px alpha(@strata_bg, 0.28);
 }
 
 popover > contents,
@@ -96,9 +122,25 @@ menu,
 dialog,
 messagedialog {
   color: @strata_text;
-  background-color: @strata_surface;
+  background-color: @strata_panel;
   border: 1px solid @strata_border;
-  border-radius: 9px;
+  border-radius: 10px;
+  box-shadow: 0 8px 24px alpha(@strata_bg, 0.72);
+}
+
+popover modelbutton,
+menuitem {
+  min-height: 30px;
+  margin: 2px 4px;
+  padding: 3px 9px;
+  border-radius: 6px;
+  color: @strata_text;
+}
+
+popover modelbutton:hover,
+menuitem:hover {
+  color: @strata_bright;
+  background-color: @strata_surface_hover;
 }
 
 entry,
@@ -106,27 +148,27 @@ searchentry {
   color: @strata_bright;
   background-color: @strata_bg;
   border: 1px solid @strata_border;
-  border-radius: 7px;
+  border-radius: 8px;
   caret-color: @strata_bright;
 }
 
 entry:focus,
 searchentry:focus {
-  border-color: @strata_text;
-  box-shadow: 0 0 0 2px alpha(@strata_text, 0.18);
+  border-color: @strata_bright;
+  box-shadow: inset 3px 0 @strata_text, 0 0 0 2px alpha(@strata_text, 0.14);
 }
 
 separator {
-  background-color: @strata_border;
+  background-color: alpha(@strata_border, 0.68);
   min-width: 1px;
   min-height: 1px;
 }
 
 scrollbar slider {
-  min-width: 6px;
+  min-width: 5px;
   min-height: 24px;
   border-radius: 6px;
-  background-color: alpha(@strata_text, 0.36);
+  background-color: alpha(@strata_text, 0.30);
 }
 
 scrollbar slider:hover {
@@ -138,6 +180,49 @@ tooltip.background {
   color: @strata_bright;
   background-color: @strata_surface;
   border: 1px solid @strata_border;
+}
+
+/* Modern overlay surfaces used by split resizing, tab overview, and toasts. */
+overlay > revealer,
+toast,
+.toast,
+.osd,
+windowcontrols {
+  color: @strata_bright;
+}
+
+toast,
+.toast,
+.osd {
+  background-color: @strata_panel;
+  border: 1px solid @strata_border;
+  border-radius: 9px;
+  box-shadow: 0 6px 18px alpha(@strata_bg, 0.72);
+}
+
+progressbar trough {
+  min-height: 3px;
+  background-color: @strata_dim;
+  border-radius: 0;
+}
+
+progressbar progress {
+  min-height: 3px;
+  background-color: @strata_bright;
+  border-radius: 0;
+}
+
+check,
+radio {
+  color: @strata_bg;
+  background-color: @strata_surface;
+  border: 1px solid @strata_border;
+}
+
+check:checked,
+radio:checked {
+  background-color: @strata_text;
+  border-color: @strata_bright;
 }
 
 selection,

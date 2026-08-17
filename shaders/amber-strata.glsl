@@ -20,6 +20,24 @@ float cursorMask(vec2 fragCoord, vec4 cursor) {
     return 1.0 - smoothstep(-1.0, 3.0, distance);
 }
 
+vec2 cursorCenter(vec4 cursor) {
+    return cursor.xy + vec2(cursor.z * 0.5, -cursor.w * 0.5);
+}
+
+float matrixCursorTrail(vec2 fragCoord) {
+    vec2 from = cursorCenter(iPreviousCursor);
+    vec2 to = cursorCenter(iCurrentCursor);
+    float moved = smoothstep(2.0, 8.0, length(to - from));
+    float trail = 0.0;
+    for (int index = 1; index <= 6; ++index) {
+        float position = float(index) / 7.0;
+        vec2 node = mix(from, to, position);
+        float nodeMask = 1.0 - smoothstep(1.1, 2.5, length(fragCoord - node));
+        trail += nodeMask * (1.0 - position * 0.58);
+    }
+    return min(trail, 1.0) * moved;
+}
+
 vec3 luminousPart(vec3 sampleColor) {
     // Remove the stable terminal background so only characters and UI glow.
     vec3 delta = max(sampleColor - iBackgroundColor, vec3(0.0));
@@ -116,12 +134,15 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float cursorCoverage = current * cursorOpacity * float(iCursorVisible.x);
     color = mix(color, cursorSurface, cursorCoverage);
 
+    // A short six-node matrix trail makes cursor movement feel intentional
+    // without smearing the terminal grid or introducing CRT artifacts.
+    float matrixTrail = matrixCursorTrail(fragCoord)
+        * exp(-age * 11.0) * float(iFocus);
+    color += amberGlow * matrixTrail * 0.62;
+
     // Cursor movement accompanies normal typing. Briefly energize the newly
     // written area, then let it fall away like phosphor afterglow.
-    vec2 pulseCenter = vec2(
-        iCurrentCursor.x + iCurrentCursor.z * 0.5,
-        iCurrentCursor.y - iCurrentCursor.w * 0.5
-    );
+    vec2 pulseCenter = cursorCenter(iCurrentCursor);
     float pulseDistance = length((fragCoord - pulseCenter)
         / vec2(TYPE_PULSE_RADIUS, TYPE_PULSE_RADIUS * 0.72));
     float pulseShape = exp(-pulseDistance * pulseDistance * 2.4);

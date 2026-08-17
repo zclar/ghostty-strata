@@ -8,6 +8,12 @@ afterglow, and a matching modern application shell.
 The result is deliberately restrained: retro atmosphere without bending the
 terminal grid or making everyday text difficult to read.
 
+The shell language combines compact Hyprland-like spacing and layered surfaces
+with Nothing-inspired signal dots, technical numbering, and amber glyph states.
+Native tabs, menus, overlays, progress, selection, and controls share the same
+tokens. A six-node cursor trail and the settings panel's animated signal rail
+carry the matrix language into motion without adding CRT noise.
+
 ## What is included
 
 - `config.ghostty` — complete Ghostty setup, including typography and window UI
