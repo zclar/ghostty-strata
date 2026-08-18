@@ -14,9 +14,7 @@ Native tabs, menus, overlays, progress, selection, and controls share the same
 tokens. A six-node cursor trail and the settings panel's animated signal rail
 carry the matrix language into motion without adding CRT noise.
 
-The default window uses a smoked-glass `0.88` background with compositor blur.
-Opacity also applies to explicitly colored cells so the effect remains visible
-inside Codex, Neovim, tmux, and other full-screen terminal interfaces.
+The default window uses a smoked-glass `0.76` background with compositor blur.
 On KDE Plasma, enable **System Settings → Apps & Windows → Window Management →
 Desktop Effects → Blur**; KWin uses its global blur and noise sliders rather
 than Ghostty's numeric blur intensity. Keep KWin noise low for the clean modern

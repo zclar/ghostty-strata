@@ -29,10 +29,8 @@ gtk-wide-tabs = false
 gtk-custom-css = styles/amber-strata.css
 
 # Modern smoked-glass base. KWin supplies the actual blur on KDE Plasma.
-background-opacity = 0.88
-# Full-screen TUIs such as Codex repaint their own background cells. Apply the
-# glass opacity to those cells too so the compositor blur remains visible.
-background-opacity-cells = true
+background-opacity = 0.76
+background-opacity-cells = false
 background-blur = true
 
 # Native cursor and bell behavior; the shader supplies the motion trail.
