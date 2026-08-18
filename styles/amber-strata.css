@@ -9,8 +9,6 @@
 @define-color strata_dim #3a2108;
 @define-color strata_panel rgba(22, 12, 3, 0.82);
 
-window,
-window.background,
 headerbar,
 .titlebar,
 tabbar,

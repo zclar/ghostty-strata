@@ -1,5 +1,6 @@
 // Amber Strata Clean: modern phosphor glow without CRT aging artifacts.
 const float SHARPNESS = 0.20;
+const float BACKGROUND_ALPHA = 0.76;
 const float GLOW_STRENGTH = 1.28;
 const float GLOW_RADIUS = 1.80;
 const float TYPE_PULSE_STRENGTH = 0.48;
@@ -155,5 +156,14 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     color += amberGlow * previous * (1.0 - current) * exp(-age * 9.0)
         * TRAIL_STRENGTH * float(iFocus);
 
-    fragColor = vec4(max(color, vec3(0.0)), source.a);
+    // Ghostty's shader input is an opaque texture even when window background
+    // opacity is configured. Restore translucency only for background pixels;
+    // glyphs and the animated cursor remain solid and sharply readable.
+    float contentCoverage = max(
+        smoothstep(0.025, 0.22, glyphEnergy),
+        cursorCoverage
+    );
+    float outputAlpha = BACKGROUND_ALPHA
+        + (1.0 - BACKGROUND_ALPHA) * clamp(contentCoverage, 0.0, 1.0);
+    fragColor = vec4(max(color, vec3(0.0)), outputAlpha);
 }

@@ -1,4 +1,5 @@
 // Amber Strata cursor-only profile: no character glow.
+const float BACKGROUND_ALPHA = 0.76;
 const float CURSOR_PULSE_SECONDS = 1.45;
 const float CURSOR_MIN_OPACITY = 0.0;
 const float CURSOR_MAX_OPACITY = 1.0;
@@ -67,5 +68,11 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float matrixTrail = matrixCursorTrail(fragCoord)
         * exp(-age * 11.0) * float(iFocus);
     color += vec3(1.0, 0.54, 0.12) * matrixTrail * 0.62;
-    fragColor = vec4(color, source.a);
+    float contentCoverage = max(
+        smoothstep(0.025, 0.22, glyphEnergy),
+        cursorCoverage
+    );
+    float outputAlpha = BACKGROUND_ALPHA
+        + (1.0 - BACKGROUND_ALPHA) * clamp(contentCoverage, 0.0, 1.0);
+    fragColor = vec4(color, outputAlpha);
 }

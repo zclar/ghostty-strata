@@ -27,5 +27,6 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec2 centered = uv * 2.0 - 1.0;
     float edge = clamp(1.0 - dot(centered * vec2(0.86, 0.72), centered), 0.0, 1.0);
     color *= mix(1.0 - VIGNETTE_STRENGTH, 1.0, smoothstep(0.0, 0.9, edge));
+    // Preserve transparency produced by the primary Amber Strata shader.
     fragColor = vec4(max(color, vec3(0.0)), source.a);
 }

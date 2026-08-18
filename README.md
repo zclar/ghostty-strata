@@ -15,10 +15,32 @@ tokens. A six-node cursor trail and the settings panel's animated signal rail
 carry the matrix language into motion without adding CRT noise.
 
 The default window uses a smoked-glass `0.76` background with compositor blur.
+The glow and cursor-only shaders preserve opaque glyph cores while emitting the
+configured alpha for background pixels; this is required because Ghostty's
+custom-shader input texture itself is opaque.
+The GTK stylesheet intentionally does not paint the root window: doing so would
+place an opaque theme layer behind Ghostty's transparent terminal surface.
 On KDE Plasma, enable **System Settings → Apps & Windows → Window Management →
 Desktop Effects → Blur**; KWin uses its global blur and noise sliders rather
 than Ghostty's numeric blur intensity. Keep KWin noise low for the clean modern
 look intended by Amber Strata.
+
+### Compositor portability
+
+Amber Strata itself is not tied to KWin. Color, typography, shaders, cursor,
+GTK styling, and transparency travel with Ghostty on any supported system.
+Blur is the one compositor-owned layer:
+
+- **KDE Plasma / KWin:** Ghostty's `background-blur = true` requests native blur.
+- **Hyprland:** transparency works directly; enable blur globally and ensure no
+  window rule marks the Ghostty class as `no_blur`. Hyprland 0.55+ uses Lua
+  window rules, while older releases use hyprlang syntax, so the project does
+  not install a version-specific rule automatically.
+- **Other Wayland/X11 desktops:** the theme keeps its smoked translucency and
+  falls back cleanly when the compositor does not offer application blur.
+
+openSUSE with KDE uses the same KWin path as Debian/Ubuntu with KDE. Package
+installation commands may differ, but the Ghostty configuration is identical.
 
 ## What is included
 
