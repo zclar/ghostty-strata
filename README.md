@@ -160,6 +160,9 @@ the Amber Strata panel color.
 
 The selected interface mode persists when glow or font settings change. It can
 also be switched live from **Amber Strata Settings → Interface compatibility**.
+Additional adapters placed in `adapters/` appear in that settings section
+automatically. See [`adapter-sdk/README.md`](adapter-sdk/README.md) to create,
+calibrate, validate, and share integrations for other terminal agents.
 
 You can also press `Ctrl+Shift+P` inside Ghostty and choose **Amber Strata: Glow
 On** or **Amber Strata: Glow Off** while at a normal shell prompt. Ghostty does

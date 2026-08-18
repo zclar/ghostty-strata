@@ -6,6 +6,13 @@ const float GLOW_RADIUS = 1.80;
 const float TYPE_PULSE_STRENGTH = 0.48;
 // Core is application-neutral; profile.sh enables an optional agent adapter.
 const float AGENT_SURFACE_ADAPTER = 0.0;
+const float ADAPTER_CHROMA_START = 0.035;
+const float ADAPTER_CHROMA_END = 0.140;
+const float ADAPTER_LUMA_START = 0.008;
+const float ADAPTER_LUMA_FULL = 0.018;
+const float ADAPTER_LUMA_FADE = 0.120;
+const float ADAPTER_LUMA_END = 0.220;
+const vec3 ADAPTER_PANEL_COLOR = vec3(0.105, 0.034, 0.000);
 const float TYPE_PULSE_RADIUS = 34.0;
 const float TYPING_GLOW_PEAK = 1.28;
 const float TYPING_GLOW_DECAY = 2.40;
@@ -57,9 +64,11 @@ float tuiSurfaceMask(vec3 sampleColor) {
     float luminance = dot(sampleColor, vec3(0.2126, 0.7152, 0.0722));
     // Ghostty supplies shader colors in linear-corrected space. These bounds
     // correspond to the composer's ~66/60/75 sRGB panel after conversion.
-    float lowChroma = 1.0 - smoothstep(0.035, 0.14, chroma);
-    float midDark = smoothstep(0.008, 0.018, luminance)
-        * (1.0 - smoothstep(0.12, 0.22, luminance));
+    float lowChroma = 1.0 - smoothstep(
+        ADAPTER_CHROMA_START, ADAPTER_CHROMA_END, chroma
+    );
+    float midDark = smoothstep(ADAPTER_LUMA_START, ADAPTER_LUMA_FULL, luminance)
+        * (1.0 - smoothstep(ADAPTER_LUMA_FADE, ADAPTER_LUMA_END, luminance));
     return lowChroma * midDark * AGENT_SURFACE_ADAPTER;
 }
 
@@ -68,8 +77,7 @@ vec3 themedTuiSurface(vec3 sampleColor) {
     // burnt-amber panel used by the Konsole reference while preserving text.
     // Pre-compensated so translucent wallpaper blending lands near the
     // Konsole reference's ~108/71/26 sRGB surface.
-    vec3 composerAmber = vec3(0.105, 0.034, 0.000);
-    return mix(sampleColor, composerAmber, tuiSurfaceMask(sampleColor));
+    return mix(sampleColor, ADAPTER_PANEL_COLOR, tuiSurfaceMask(sampleColor));
 }
 
 float roundedTuiSurfaceMask(vec2 uv, vec2 px) {
@@ -98,7 +106,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec3 themedSource = mix(source.rgb, iBackgroundColor, rawPanel);
     themedSource = mix(
         themedSource,
-        vec3(0.105, 0.034, 0.000),
+        ADAPTER_PANEL_COLOR,
         roundedPanel
     );
     float age = max(iTime - iTimeCursorChange, 0.0);

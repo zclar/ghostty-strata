@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "core",
+  "name": "Amber Strata Core",
+  "description": "Application-neutral terminal styling with no surface recoloring.",
+  "enabled": false,
+  "detection": {
+    "chroma_start": 0.035,
+    "chroma_end": 0.14,
+    "luminance_start": 0.008,
+    "luminance_full": 0.018,
+    "luminance_fade": 0.12,
+    "luminance_end": 0.22
+  },
+  "panel_color": [0.105, 0.034, 0.0]
+}

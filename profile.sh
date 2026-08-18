@@ -21,10 +21,17 @@ if [[ -z "$agent_mode" && -f "$agent_mode_path" ]]; then
     agent_mode="$(<"$agent_mode_path")"
 fi
 agent_mode="${agent_mode:-core}"
-case "$agent_mode" in
-    core|codex) ;;
-    *) printf 'Interface mode must be core or codex.\n' >&2; exit 2 ;;
-esac
+[[ "$agent_mode" =~ ^[a-z0-9][a-z0-9-]*$ ]] || {
+    printf 'Invalid adapter id: %s\n' "$agent_mode" >&2
+    exit 2
+}
+adapter_path="$repo_dir/adapters/$agent_mode.json"
+[[ -f "$adapter_path" ]] || {
+    printf 'Unknown adapter: %s\nAvailable adapters:\n' "$agent_mode" >&2
+    find "$repo_dir/adapters" -maxdepth 1 -type f -name '*.json' -printf '  %f\n' \
+        | sed 's/\.json$//' >&2
+    exit 2
+}
 
 case "$profile" in
     glow-on) source_path="$repo_dir/shaders/amber-strata.glsl" ;;
@@ -33,20 +40,14 @@ case "$profile" in
 esac
 
 mkdir -p "$config_dir/shaders"
-# Update the installed shader, then ask Ghostty to recompile it.
-profile_contents="$(<"$source_path")"
-if [[ "$profile" == "glow-soft" ]]; then
-    # Preserve the animated phosphor character while keeping neighboring
-    # matrix nodes distinct at terminal sizes.
-    profile_contents="${profile_contents/const float GLOW_STRENGTH = 1.28;/const float GLOW_STRENGTH = 0.72;}"
-    profile_contents="${profile_contents/const float GLOW_RADIUS = 1.80;/const float GLOW_RADIUS = 1.15;}"
-    profile_contents="${profile_contents/const float TYPE_PULSE_STRENGTH = 0.48;/const float TYPE_PULSE_STRENGTH = 0.30;}"
-fi
-if [[ "$agent_mode" == "codex" ]]; then
-    profile_contents="${profile_contents/const float AGENT_SURFACE_ADAPTER = 0.0;/const float AGENT_SURFACE_ADAPTER = 1.0;}"
-fi
-[[ -n "$profile_contents" ]] || { printf 'Shader profile is empty; refusing to apply.\n' >&2; exit 1; }
-printf '%s\n' "$profile_contents" > "$active_path"
+# Validate the adapter and render a complete shader before asking Ghostty to
+# recompile it. The renderer refuses malformed or out-of-range SDK values.
+python3 "$repo_dir/adapter-sdk/render_adapter.py" \
+    --source "$source_path" \
+    --adapter "$adapter_path" \
+    --glow-mode "$profile" \
+    --output "$active_path"
+[[ -s "$active_path" ]] || { printf 'Rendered shader is empty; refusing to apply.\n' >&2; exit 1; }
 printf '%s\n' "$agent_mode" > "$agent_mode_path"
 printf '%s\n' "$profile" > "$glow_mode_path"
 printf 'Amber Strata profile: %s / %s\n' "$profile" "$agent_mode"

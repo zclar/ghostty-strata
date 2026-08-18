@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import os
+import json
 import subprocess
 import tkinter as tk
 import tkinter.font as tkfont
@@ -15,6 +16,10 @@ CONFIG = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "gho
 FONT_CONFIG = CONFIG / "font.ghostty"
 ACTIVE_SHADER = CONFIG / "shaders" / "active.glsl"
 AGENT_MODE = CONFIG / "agent-mode"
+ADAPTERS = {
+    path.stem: json.loads(path.read_text()).get("name", path.stem)
+    for path in sorted((REPO / "adapters").glob("*.json"))
+}
 
 FONTS = {
     "Terminus": ("Terminus (TTF)", "Medium", True, 165, "-6%", 11),
@@ -50,8 +55,8 @@ class Settings(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
         self.title("Amber Strata Settings")
-        self.geometry("760x780")
-        self.minsize(680, 740)
+        self.geometry("760x850")
+        self.minsize(680, 800)
         self.configure(bg=BG)
 
         current = parse_config()
@@ -74,7 +79,7 @@ class Settings(tk.Tk):
         self.glow = tk.BooleanVar(value=glow_enabled)
         saved_agent_mode = AGENT_MODE.read_text().strip() if AGENT_MODE.exists() else "core"
         self.agent_mode = tk.StringVar(
-            value=saved_agent_mode if saved_agent_mode in {"core", "codex"} else "core"
+            value=saved_agent_mode if saved_agent_mode in ADAPTERS else "core"
         )
         self.status = tk.StringVar(value="Changes preview here immediately.")
         self.identity_phase = 0
@@ -229,20 +234,14 @@ class Settings(tk.Tk):
             text="Interface compatibility",
             style="Card.TLabel",
         ).pack(anchor="w", pady=(13, 3))
-        ttk.Radiobutton(
-            effects,
-            text="Core — universal terminal and agent styling",
-            value="core",
-            variable=self.agent_mode,
-            command=self._apply_interface_live,
-        ).pack(anchor="w", pady=2)
-        ttk.Radiobutton(
-            effects,
-            text="Codex — Core plus amber composer correction",
-            value="codex",
-            variable=self.agent_mode,
-            command=self._apply_interface_live,
-        ).pack(anchor="w", pady=2)
+        for adapter_id, adapter_name in ADAPTERS.items():
+            ttk.Radiobutton(
+                effects,
+                text=f"{adapter_name}  [{adapter_id}]",
+                value=adapter_id,
+                variable=self.agent_mode,
+                command=self._apply_interface_live,
+            ).pack(anchor="w", pady=2)
 
         preview_card = ttk.Frame(root, style="Card.TFrame", padding=18)
         preview_card.pack(fill="both", expand=True)
@@ -316,7 +315,7 @@ class Settings(tk.Tk):
             [str(REPO / "agent-profile.sh"), self.agent_mode.get()],
             check=True,
         )
-        label = "universal Core" if self.agent_mode.get() == "core" else "Codex adapter"
+        label = ADAPTERS.get(self.agent_mode.get(), self.agent_mode.get())
         self.status.set(f"Interface mode: {label}.")
 
     def _write_font(self) -> None:

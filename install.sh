@@ -30,6 +30,8 @@ link_file() {
 link_file "$repo_dir/config.ghostty" "$config_dir/config.ghostty"
 link_file "$repo_dir/profile.sh" "$config_dir/profile.sh"
 link_file "$repo_dir/agent-profile.sh" "$config_dir/agent-profile.sh"
+link_file "$repo_dir/adapters" "$config_dir/adapters"
+link_file "$repo_dir/adapter-sdk" "$config_dir/adapter-sdk"
 link_file "$repo_dir/font-profile.sh" "$config_dir/font-profile.sh"
 link_file "$repo_dir/settings.py" "$config_dir/settings.py"
 link_file "$repo_dir/themes/Amber Strata" "$config_dir/themes/Amber Strata"

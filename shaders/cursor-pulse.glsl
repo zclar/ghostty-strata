@@ -5,6 +5,13 @@ const float CURSOR_MIN_OPACITY = 0.0;
 const float CURSOR_MAX_OPACITY = 1.0;
 // Core is application-neutral; profile.sh enables an optional agent adapter.
 const float AGENT_SURFACE_ADAPTER = 0.0;
+const float ADAPTER_CHROMA_START = 0.035;
+const float ADAPTER_CHROMA_END = 0.140;
+const float ADAPTER_LUMA_START = 0.008;
+const float ADAPTER_LUMA_FULL = 0.018;
+const float ADAPTER_LUMA_FADE = 0.120;
+const float ADAPTER_LUMA_END = 0.220;
+const vec3 ADAPTER_PANEL_COLOR = vec3(0.105, 0.034, 0.000);
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
     vec2 halfSize = max(cursor.zw * 0.5, vec2(1.0));
@@ -38,15 +45,16 @@ float tuiSurfaceMask(vec3 sampleColor) {
     float low = min(sampleColor.r, min(sampleColor.g, sampleColor.b));
     float chroma = high - low;
     float luminance = dot(sampleColor, vec3(0.2126, 0.7152, 0.0722));
-    float lowChroma = 1.0 - smoothstep(0.035, 0.14, chroma);
-    float midDark = smoothstep(0.008, 0.018, luminance)
-        * (1.0 - smoothstep(0.12, 0.22, luminance));
+    float lowChroma = 1.0 - smoothstep(
+        ADAPTER_CHROMA_START, ADAPTER_CHROMA_END, chroma
+    );
+    float midDark = smoothstep(ADAPTER_LUMA_START, ADAPTER_LUMA_FULL, luminance)
+        * (1.0 - smoothstep(ADAPTER_LUMA_FADE, ADAPTER_LUMA_END, luminance));
     return lowChroma * midDark * AGENT_SURFACE_ADAPTER;
 }
 
 vec3 themedTuiSurface(vec3 sampleColor) {
-    vec3 composerAmber = vec3(0.105, 0.034, 0.000);
-    return mix(sampleColor, composerAmber, tuiSurfaceMask(sampleColor));
+    return mix(sampleColor, ADAPTER_PANEL_COLOR, tuiSurfaceMask(sampleColor));
 }
 
 float roundedTuiSurfaceMask(vec2 uv, vec2 px) {
@@ -72,7 +80,7 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec3 themedSource = mix(source.rgb, iBackgroundColor, rawPanel);
     themedSource = mix(
         themedSource,
-        vec3(0.105, 0.034, 0.000),
+        ADAPTER_PANEL_COLOR,
         roundedPanel
     );
     vec3 delta = max(themedSource - iBackgroundColor, vec3(0.0));

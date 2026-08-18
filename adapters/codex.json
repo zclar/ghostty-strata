@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "codex",
+  "name": "Codex",
+  "description": "Maps the fixed Codex composer surface into Amber Strata glass.",
+  "enabled": true,
+  "detection": {
+    "chroma_start": 0.035,
+    "chroma_end": 0.14,
+    "luminance_start": 0.008,
+    "luminance_full": 0.018,
+    "luminance_fade": 0.12,
+    "luminance_end": 0.22
+  },
+  "panel_color": [0.105, 0.034, 0.0]
+}
