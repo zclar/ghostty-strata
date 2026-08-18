@@ -1,13 +1,13 @@
 /* Amber Strata shell — GTK 4 / libadwaita */
-@define-color strata_bg #100902;
-@define-color strata_surface #1b0f04;
-@define-color strata_surface_hover #2b1806;
+@define-color strata_bg rgba(16, 9, 2, 0.88);
+@define-color strata_surface rgba(27, 15, 4, 0.90);
+@define-color strata_surface_hover rgba(43, 24, 6, 0.92);
 @define-color strata_border #6a3c0d;
 @define-color strata_muted #a96318;
 @define-color strata_text #ea851d;
 @define-color strata_bright #ffb840;
 @define-color strata_dim #3a2108;
-@define-color strata_panel #160c03;
+@define-color strata_panel rgba(22, 12, 3, 0.90);
 
 window,
 window.background,
