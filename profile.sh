@@ -21,8 +21,7 @@ case "$profile" in
 esac
 
 mkdir -p "$config_dir/shaders"
-# Update the watched shader itself; Ghostty hot-reloads shaders without a
-# configuration reload. active.glsl is installer-owned and never a repo file.
+# Update the installed shader, then ask Ghostty to recompile it.
 profile_contents="$(<"$source_path")"
 if [[ "$profile" == "glow-soft" ]]; then
     # Preserve the animated phosphor character while keeping neighboring
@@ -34,4 +33,10 @@ fi
 [[ -n "$profile_contents" ]] || { printf 'Shader profile is empty; refusing to apply.\n' >&2; exit 1; }
 printf '%s\n' "$profile_contents" > "$active_path"
 printf 'Amber Strata profile: %s\n' "$profile"
-printf 'Ghostty is hot-reloading the effect now.\n'
+if command -v pgrep >/dev/null 2>&1 && command -v pkill >/dev/null 2>&1 \
+    && pgrep -x ghostty >/dev/null 2>&1; then
+    pkill -USR2 -x ghostty
+    printf 'Ghostty reload signal sent.\n'
+else
+    printf 'Reload Ghostty with Ctrl+Shift+,.\n'
+fi

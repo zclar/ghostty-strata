@@ -31,15 +31,20 @@ float matrixCursorTrail(vec2 fragCoord) {
     return min(trail, 1.0) * moved;
 }
 
-vec3 themedTuiSurface(vec3 sampleColor) {
+float tuiSurfaceMask(vec3 sampleColor) {
     float high = max(sampleColor.r, max(sampleColor.g, sampleColor.b));
     float low = min(sampleColor.r, min(sampleColor.g, sampleColor.b));
     float chroma = high - low;
     float luminance = dot(sampleColor, vec3(0.2126, 0.7152, 0.0722));
-    float neutral = 1.0 - smoothstep(0.035, 0.10, chroma);
-    float midDark = smoothstep(0.09, 0.14, luminance)
-        * (1.0 - smoothstep(0.23, 0.32, luminance));
-    return mix(sampleColor, iBackgroundColor, neutral * midDark * 0.98);
+    float lowChroma = 1.0 - smoothstep(0.035, 0.14, chroma);
+    float midDark = smoothstep(0.008, 0.018, luminance)
+        * (1.0 - smoothstep(0.12, 0.22, luminance));
+    return lowChroma * midDark;
+}
+
+vec3 themedTuiSurface(vec3 sampleColor) {
+    vec3 composerAmber = vec3(0.105, 0.034, 0.000);
+    return mix(sampleColor, composerAmber, tuiSurfaceMask(sampleColor));
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
@@ -68,11 +73,5 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     float matrixTrail = matrixCursorTrail(fragCoord)
         * exp(-age * 11.0) * float(iFocus);
     color += vec3(1.0, 0.54, 0.12) * matrixTrail * 0.62;
-    float contentCoverage = max(
-        smoothstep(0.025, 0.22, glyphEnergy),
-        cursorCoverage
-    );
-    float outputAlpha = BACKGROUND_ALPHA
-        + (1.0 - BACKGROUND_ALPHA) * clamp(contentCoverage, 0.0, 1.0);
-    fragColor = vec4(color, outputAlpha);
+    fragColor = vec4(color, BACKGROUND_ALPHA);
 }

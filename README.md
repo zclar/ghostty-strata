@@ -62,7 +62,8 @@ the panel remains crisp.
 
 Codex currently emits its composer as a fixed RGB surface rather than an ANSI
 palette color. Both Amber Strata shaders selectively re-tone that low-chroma
-mid-dark panel to the terminal background. The animated cursor preserves the source
+purple-gray panel to a translucent burnt amber modeled after the Konsole
+reference. The animated cursor preserves the source
 glyph while faded out and explicitly draws its dark inverse inside the block.
 
 With character glow enabled, every cursor-changing keystroke resets the bloom
@@ -146,9 +147,10 @@ You can also press `Ctrl+Shift+P` inside Ghostty and choose **Amber Strata: Glow
 On** or **Amber Strata: Glow Off** while at a normal shell prompt. Ghostty does
 not expose an action that executes a profile switch directly, so the palette
 entry enters the installed command into that prompt. The switch updates the
-installed `shaders/active.glsl`, which Ghostty hot-reloads immediately. The
-active selection lives under `~/.config/ghostty`, so switching does not dirty
-the Git checkout.
+installed `shaders/active.glsl` and sends Ghostty `SIGUSR2` so the program is
+recompiled. If no Ghostty process is discoverable, reload with `Ctrl+Shift+,`.
+The active selection lives under `~/.config/ghostty`, so switching does not
+dirty the Git checkout.
 
 ## Matrix fonts
 

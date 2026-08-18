@@ -48,18 +48,26 @@ vec3 luminousPart(vec3 sampleColor) {
     return delta * smoothstep(0.10, 0.30, energy);
 }
 
-vec3 themedTuiSurface(vec3 sampleColor) {
-    // Codex draws its composer with a fixed low-chroma RGB surface rather than
-    // ANSI color 8. Re-tone only mid-dark neutral panels; preserve the true
-    // terminal background, amber glyphs, and bright neutral text.
+float tuiSurfaceMask(vec3 sampleColor) {
     float high = max(sampleColor.r, max(sampleColor.g, sampleColor.b));
     float low = min(sampleColor.r, min(sampleColor.g, sampleColor.b));
     float chroma = high - low;
     float luminance = dot(sampleColor, vec3(0.2126, 0.7152, 0.0722));
-    float neutral = 1.0 - smoothstep(0.035, 0.10, chroma);
-    float midDark = smoothstep(0.09, 0.14, luminance)
-        * (1.0 - smoothstep(0.23, 0.32, luminance));
-    return mix(sampleColor, iBackgroundColor, neutral * midDark * 0.98);
+    // Ghostty supplies shader colors in linear-corrected space. These bounds
+    // correspond to the composer's ~66/60/75 sRGB panel after conversion.
+    float lowChroma = 1.0 - smoothstep(0.035, 0.14, chroma);
+    float midDark = smoothstep(0.008, 0.018, luminance)
+        * (1.0 - smoothstep(0.12, 0.22, luminance));
+    return lowChroma * midDark;
+}
+
+vec3 themedTuiSurface(vec3 sampleColor) {
+    // Codex emits a fixed purple-gray composer. Convert it to the translucent
+    // burnt-amber panel used by the Konsole reference while preserving text.
+    // Pre-compensated so translucent wallpaper blending lands near the
+    // Konsole reference's ~108/71/26 sRGB surface.
+    vec3 composerAmber = vec3(0.105, 0.034, 0.000);
+    return mix(sampleColor, composerAmber, tuiSurfaceMask(sampleColor));
 }
 
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
@@ -159,11 +167,5 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     // Ghostty's shader input is an opaque texture even when window background
     // opacity is configured. Restore translucency only for background pixels;
     // glyphs and the animated cursor remain solid and sharply readable.
-    float contentCoverage = max(
-        smoothstep(0.025, 0.22, glyphEnergy),
-        cursorCoverage
-    );
-    float outputAlpha = BACKGROUND_ALPHA
-        + (1.0 - BACKGROUND_ALPHA) * clamp(contentCoverage, 0.0, 1.0);
-    fragColor = vec4(max(color, vec3(0.0)), outputAlpha);
+    fragColor = vec4(max(color, vec3(0.0)), BACKGROUND_ALPHA);
 }
