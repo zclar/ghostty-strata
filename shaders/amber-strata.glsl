@@ -1,6 +1,6 @@
 // Amber Strata Clean: modern phosphor glow without CRT aging artifacts.
 const float SHARPNESS = 0.20;
-const float BACKGROUND_ALPHA = 0.76;
+const float BACKGROUND_ALPHA = 0.70;
 const float GLOW_STRENGTH = 1.28;
 const float GLOW_RADIUS = 1.80;
 const float TYPE_PULSE_STRENGTH = 0.48;
@@ -70,11 +70,35 @@ vec3 themedTuiSurface(vec3 sampleColor) {
     return mix(sampleColor, composerAmber, tuiSurfaceMask(sampleColor));
 }
 
+float roundedTuiSurfaceMask(vec2 uv, vec2 px) {
+    // Average a compact neighborhood around the detected TUI background.
+    // Straight edges survive while low-coverage corners recede, producing a
+    // visible 9 px radius from otherwise rectangular terminal cell backgrounds.
+    vec2 radius = px * 9.0;
+    float coverage = tuiSurfaceMask(texture(iChannel0, uv).rgb) * 4.0;
+    coverage += tuiSurfaceMask(texture(iChannel0, uv + vec2( radius.x, 0.0)).rgb);
+    coverage += tuiSurfaceMask(texture(iChannel0, uv + vec2(-radius.x, 0.0)).rgb);
+    coverage += tuiSurfaceMask(texture(iChannel0, uv + vec2(0.0,  radius.y)).rgb);
+    coverage += tuiSurfaceMask(texture(iChannel0, uv + vec2(0.0, -radius.y)).rgb);
+    coverage += tuiSurfaceMask(texture(iChannel0, uv + vec2( radius.x,  radius.y)).rgb);
+    coverage += tuiSurfaceMask(texture(iChannel0, uv + vec2(-radius.x,  radius.y)).rgb);
+    coverage += tuiSurfaceMask(texture(iChannel0, uv + vec2( radius.x, -radius.y)).rgb);
+    coverage += tuiSurfaceMask(texture(iChannel0, uv + vec2(-radius.x, -radius.y)).rgb);
+    return smoothstep(0.56, 0.82, coverage / 12.0);
+}
+
 void mainImage(out vec4 fragColor, in vec2 fragCoord) {
     vec2 uv = fragCoord / iResolution.xy;
     vec2 px = 1.0 / iResolution.xy;
     vec4 source = texture(iChannel0, uv);
-    vec3 themedSource = themedTuiSurface(source.rgb);
+    float rawPanel = tuiSurfaceMask(source.rgb);
+    float roundedPanel = roundedTuiSurfaceMask(uv, px) * rawPanel;
+    vec3 themedSource = mix(source.rgb, iBackgroundColor, rawPanel);
+    themedSource = mix(
+        themedSource,
+        vec3(0.105, 0.034, 0.000),
+        roundedPanel
+    );
     float age = max(iTime - iTimeCursorChange, 0.0);
 
     // Restore a defined glyph core before adding light around it. This is a

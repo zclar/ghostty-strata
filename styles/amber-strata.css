@@ -1,13 +1,17 @@
 /* Amber Strata shell — GTK 4 / libadwaita */
-@define-color strata_bg rgba(16, 9, 2, 0.76);
-@define-color strata_surface rgba(27, 15, 4, 0.82);
-@define-color strata_surface_hover rgba(43, 24, 6, 0.88);
+@define-color strata_bg rgba(16, 9, 2, 0.70);
+@define-color strata_surface rgba(27, 15, 4, 0.76);
+@define-color strata_surface_hover rgba(43, 24, 6, 0.84);
 @define-color strata_border #6a3c0d;
 @define-color strata_muted #a96318;
 @define-color strata_text #ea851d;
 @define-color strata_bright #ffb840;
 @define-color strata_dim #3a2108;
-@define-color strata_panel rgba(22, 12, 3, 0.82);
+@define-color strata_panel rgba(22, 12, 3, 0.76);
+
+window {
+  border-radius: 12px;
+}
 
 headerbar,
 .titlebar,
@@ -40,7 +44,7 @@ tabbox tab {
   margin: 4px 3px;
   padding: 0 11px;
   border: 1px solid transparent;
-  border-radius: 7px;
+  border-radius: 10px;
   background-color: transparent;
   color: @strata_muted;
   box-shadow: none;
@@ -73,7 +77,7 @@ tabbox tab:selected label {
 
 button {
   border: 1px solid transparent;
-  border-radius: 7px;
+  border-radius: 9px;
   color: @strata_muted;
   background-color: transparent;
   background-image: none;
@@ -88,7 +92,7 @@ tabbar button {
   margin: 2px;
   padding: 2px;
   border: 1px solid transparent;
-  border-radius: 7px;
+  border-radius: 9px;
   background-color: transparent;
   background-image: none;
 }
@@ -122,7 +126,7 @@ messagedialog {
   color: @strata_text;
   background-color: @strata_panel;
   border: 1px solid @strata_border;
-  border-radius: 10px;
+  border-radius: 12px;
   box-shadow: 0 8px 24px alpha(@strata_bg, 0.72);
 }
 
@@ -131,7 +135,7 @@ menuitem {
   min-height: 30px;
   margin: 2px 4px;
   padding: 3px 9px;
-  border-radius: 6px;
+  border-radius: 9px;
   color: @strata_text;
 }
 
@@ -146,7 +150,7 @@ searchentry {
   color: @strata_bright;
   background-color: @strata_bg;
   border: 1px solid @strata_border;
-  border-radius: 8px;
+  border-radius: 10px;
   caret-color: @strata_bright;
 }
 
@@ -194,7 +198,7 @@ toast,
 .osd {
   background-color: @strata_panel;
   border: 1px solid @strata_border;
-  border-radius: 9px;
+  border-radius: 12px;
   box-shadow: 0 6px 18px alpha(@strata_bg, 0.72);
 }
 

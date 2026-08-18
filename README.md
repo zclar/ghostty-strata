@@ -14,7 +14,7 @@ Native tabs, menus, overlays, progress, selection, and controls share the same
 tokens. A six-node cursor trail and the settings panel's animated signal rail
 carry the matrix language into motion without adding CRT noise.
 
-The default window uses a smoked-glass `0.76` background with compositor blur.
+The default window uses a smoked-glass `0.70` background with compositor blur.
 The glow and cursor-only shaders preserve opaque glyph cores while emitting the
 configured alpha for background pixels; this is required because Ghostty's
 custom-shader input texture itself is opaque.
@@ -63,7 +63,9 @@ the panel remains crisp.
 Codex currently emits its composer as a fixed RGB surface rather than an ANSI
 palette color. Both Amber Strata shaders selectively re-tone that low-chroma
 purple-gray panel to a translucent burnt amber modeled after the Konsole
-reference. The animated cursor preserves the source
+reference. A neighborhood mask rounds TUI highlight corners even though the
+underlying terminal application draws rectangular background cells. The
+animated cursor preserves the source
 glyph while faded out and explicitly draws its dark inverse inside the block.
 
 With character glow enabled, every cursor-changing keystroke resets the bloom
