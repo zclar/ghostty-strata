@@ -145,6 +145,22 @@ animated block cursor; `glow-off` removes character glow and the typing pulse.
 ./profile.sh glow-off
 ```
 
+## Agent compatibility
+
+Amber Strata Core contains the portable Ghostty palette, typography, glow,
+cursor, transparency, and application chrome. It is safe for shells, editors,
+SSH sessions, and terminal agents that use the terminal palette. The optional
+Codex adapter additionally converts Codex's fixed neutral composer surface to
+the Amber Strata panel color.
+
+```sh
+./agent-profile.sh core
+./agent-profile.sh codex
+```
+
+The selected interface mode persists when glow or font settings change. It can
+also be switched live from **Amber Strata Settings → Interface compatibility**.
+
 You can also press `Ctrl+Shift+P` inside Ghostty and choose **Amber Strata: Glow
 On** or **Amber Strata: Glow Off** while at a normal shell prompt. Ghostty does
 not expose an action that executes a profile switch directly, so the palette

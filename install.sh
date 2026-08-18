@@ -29,6 +29,7 @@ link_file() {
 
 link_file "$repo_dir/config.ghostty" "$config_dir/config.ghostty"
 link_file "$repo_dir/profile.sh" "$config_dir/profile.sh"
+link_file "$repo_dir/agent-profile.sh" "$config_dir/agent-profile.sh"
 link_file "$repo_dir/font-profile.sh" "$config_dir/font-profile.sh"
 link_file "$repo_dir/settings.py" "$config_dir/settings.py"
 link_file "$repo_dir/themes/Amber Strata" "$config_dir/themes/Amber Strata"
@@ -55,7 +56,9 @@ printf '[Desktop Entry]\nType=Application\nName=Amber Strata Settings\nComment=C
 if [[ ! -e "$config_dir/shaders/active.glsl" ]]; then
     profile_contents="$(<"$repo_dir/shaders/amber-strata.glsl")"
     printf '%s\n' "$profile_contents" > "$config_dir/shaders/active.glsl"
-    printf 'Selected profile: glow-on\n'
+    printf 'core\n' > "$config_dir/agent-mode"
+    printf 'glow-on\n' > "$config_dir/glow-mode"
+    printf 'Selected profile: glow-on / core\n'
 fi
 
 printf '\nAmber Strata installed. Restart Ghostty, or reload with Ctrl+Shift+,.\n'

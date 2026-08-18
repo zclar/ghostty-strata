@@ -3,6 +3,8 @@ const float BACKGROUND_ALPHA = 0.70;
 const float CURSOR_PULSE_SECONDS = 1.45;
 const float CURSOR_MIN_OPACITY = 0.0;
 const float CURSOR_MAX_OPACITY = 1.0;
+// Core is application-neutral; profile.sh enables an optional agent adapter.
+const float AGENT_SURFACE_ADAPTER = 0.0;
 
 float cursorMask(vec2 fragCoord, vec4 cursor) {
     vec2 halfSize = max(cursor.zw * 0.5, vec2(1.0));
@@ -39,7 +41,7 @@ float tuiSurfaceMask(vec3 sampleColor) {
     float lowChroma = 1.0 - smoothstep(0.035, 0.14, chroma);
     float midDark = smoothstep(0.008, 0.018, luminance)
         * (1.0 - smoothstep(0.12, 0.22, luminance));
-    return lowChroma * midDark;
+    return lowChroma * midDark * AGENT_SURFACE_ADAPTER;
 }
 
 vec3 themedTuiSurface(vec3 sampleColor) {

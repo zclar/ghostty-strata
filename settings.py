@@ -14,6 +14,7 @@ REPO = Path(__file__).resolve().parent
 CONFIG = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "ghostty"
 FONT_CONFIG = CONFIG / "font.ghostty"
 ACTIVE_SHADER = CONFIG / "shaders" / "active.glsl"
+AGENT_MODE = CONFIG / "agent-mode"
 
 FONTS = {
     "Terminus": ("Terminus (TTF)", "Medium", True, 165, "-6%", 11),
@@ -71,6 +72,10 @@ class Settings(tk.Tk):
             and ACTIVE_SHADER.read_bytes() != glow_off_source.read_bytes()
         )
         self.glow = tk.BooleanVar(value=glow_enabled)
+        saved_agent_mode = AGENT_MODE.read_text().strip() if AGENT_MODE.exists() else "core"
+        self.agent_mode = tk.StringVar(
+            value=saved_agent_mode if saved_agent_mode in {"core", "codex"} else "core"
+        )
         self.status = tk.StringVar(value="Changes preview here immediately.")
         self.identity_phase = 0
 
@@ -219,6 +224,25 @@ class Settings(tk.Tk):
             variable=self.glow,
             command=self._apply_glow_live,
         ).pack(anchor="w", pady=(8, 0))
+        ttk.Label(
+            effects,
+            text="Interface compatibility",
+            style="Card.TLabel",
+        ).pack(anchor="w", pady=(13, 3))
+        ttk.Radiobutton(
+            effects,
+            text="Core — universal terminal and agent styling",
+            value="core",
+            variable=self.agent_mode,
+            command=self._apply_interface_live,
+        ).pack(anchor="w", pady=2)
+        ttk.Radiobutton(
+            effects,
+            text="Codex — Core plus amber composer correction",
+            value="codex",
+            variable=self.agent_mode,
+            command=self._apply_interface_live,
+        ).pack(anchor="w", pady=2)
 
         preview_card = ttk.Frame(root, style="Card.TFrame", padding=18)
         preview_card.pack(fill="both", expand=True)
@@ -278,11 +302,22 @@ class Settings(tk.Tk):
         profile = "glow-soft" if self.glow.get() and display_face else (
             "glow-on" if self.glow.get() else "glow-off"
         )
-        subprocess.run([str(REPO / "profile.sh"), profile], check=True)
+        subprocess.run(
+            [str(REPO / "profile.sh"), profile, self.agent_mode.get()],
+            check=True,
+        )
         state = "display-safe" if profile == "glow-soft" else (
             "enabled" if self.glow.get() else "disabled"
         )
         self.status.set(f"Glow {state} live.")
+
+    def _apply_interface_live(self) -> None:
+        subprocess.run(
+            [str(REPO / "agent-profile.sh"), self.agent_mode.get()],
+            check=True,
+        )
+        label = "universal Core" if self.agent_mode.get() == "core" else "Codex adapter"
+        self.status.set(f"Interface mode: {label}.")
 
     def _write_font(self) -> None:
         family, style, thicken, default_strength, width, _minimum = FONTS[self.font_choice.get()]

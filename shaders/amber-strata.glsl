@@ -4,6 +4,8 @@ const float BACKGROUND_ALPHA = 0.70;
 const float GLOW_STRENGTH = 1.28;
 const float GLOW_RADIUS = 1.80;
 const float TYPE_PULSE_STRENGTH = 0.48;
+// Core is application-neutral; profile.sh enables an optional agent adapter.
+const float AGENT_SURFACE_ADAPTER = 0.0;
 const float TYPE_PULSE_RADIUS = 34.0;
 const float TYPING_GLOW_PEAK = 1.28;
 const float TYPING_GLOW_DECAY = 2.40;
@@ -58,7 +60,7 @@ float tuiSurfaceMask(vec3 sampleColor) {
     float lowChroma = 1.0 - smoothstep(0.035, 0.14, chroma);
     float midDark = smoothstep(0.008, 0.018, luminance)
         * (1.0 - smoothstep(0.12, 0.22, luminance));
-    return lowChroma * midDark;
+    return lowChroma * midDark * AGENT_SURFACE_ADAPTER;
 }
 
 vec3 themedTuiSurface(vec3 sampleColor) {
