@@ -23,31 +23,48 @@ tabbox {
 
 headerbar,
 .titlebar {
-  min-height: 40px;
-  padding: 0 7px;
+  min-height: 42px;
+  padding: 0 8px;
   background-color: @strata_panel;
-  border-top: 1px solid alpha(@strata_text, 0.16);
-  border-bottom: 1px solid alpha(@strata_border, 0.72);
-  box-shadow: inset 0 -1px alpha(@strata_bg, 0.85);
+  background-image:
+    linear-gradient(to bottom, alpha(@strata_text, 0.07), transparent 3px),
+    repeating-linear-gradient(
+      to right,
+      transparent 0,
+      transparent 13px,
+      alpha(@strata_text, 0.035) 13px,
+      alpha(@strata_text, 0.035) 14px
+    );
+  border-top: 1px solid alpha(@strata_bright, 0.20);
+  border-bottom: 1px solid alpha(@strata_text, 0.55);
+  box-shadow:
+    inset 0 1px alpha(@strata_bg, 0.78),
+    inset 0 -2px alpha(@strata_bg, 0.92);
 }
 
 headerbar windowtitle,
 .titlebar windowtitle {
   color: @strata_muted;
+  font-family: "DM Mono";
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 1.4px;
+}
+
+tabbar,
+tabbox {
+  background-color: transparent;
 }
 
 tabbar tab,
 tabbox tab {
-  min-height: 30px;
-  margin: 4px 3px;
-  padding: 0 11px;
+  min-height: 31px;
+  margin: 5px 4px;
+  padding: 0 13px;
   border: 1px solid transparent;
-  border-radius: 10px;
-  background-color: transparent;
+  border-radius: 7px;
+  background-color: alpha(@strata_bg, 0.30);
   color: @strata_muted;
-  box-shadow: none;
+  box-shadow: inset 0 -1px alpha(@strata_border, 0.28);
 }
 
 tabbar tab:hover,
@@ -64,7 +81,10 @@ tabbox tab:selected {
   background-color: @strata_surface_hover;
   color: @strata_bright;
   border-color: @strata_border;
-  box-shadow: inset 0 -2px @strata_text;
+  box-shadow:
+    inset 3px 0 @strata_text,
+    inset 0 -2px @strata_bright,
+    0 0 10px alpha(@strata_text, 0.10);
 }
 
 tabbar tab:checked label,
@@ -72,7 +92,7 @@ tabbox tab:checked label,
 tabbar tab:selected label,
 tabbox tab:selected label {
   font-weight: 600;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.9px;
 }
 
 button {
@@ -87,20 +107,97 @@ button {
 headerbar button,
 .titlebar button,
 tabbar button {
-  min-width: 26px;
-  min-height: 26px;
-  margin: 2px;
+  min-width: 27px;
+  min-height: 27px;
+  margin: 2px 1px;
   padding: 2px;
-  border: 1px solid transparent;
-  border-radius: 9px;
-  background-color: transparent;
+  border: 1px solid alpha(@strata_border, 0.20);
+  border-radius: 6px;
+  background-color: alpha(@strata_bg, 0.24);
   background-image: none;
 }
 
 headerbar button.circular,
 .titlebar button.circular,
 tabbar button.circular {
-  border-radius: 5px;
+  border-radius: 6px;
+}
+
+headerbar windowcontrols,
+.titlebar windowcontrols {
+  margin: 5px 2px 5px 6px;
+  padding: 1px 3px;
+  border: 1px solid alpha(@strata_border, 0.46);
+  border-radius: 8px;
+  background-color: alpha(@strata_bg, 0.46);
+  box-shadow: inset 0 1px alpha(@strata_text, 0.06);
+}
+
+headerbar windowcontrols button,
+.titlebar windowcontrols button {
+  margin: 0;
+  border-color: transparent;
+  background-color: transparent;
+}
+
+/* GTK 4 does not expose per-window icon-theme replacement through CSS.
+ * Hide the three stock title-button images and draw compact phosphor-matrix
+ * controls directly in their button backgrounds instead. */
+windowcontrols button.minimize image,
+windowcontrols button.maximize image,
+windowcontrols button.close image {
+  opacity: 0;
+}
+
+windowcontrols button.minimize {
+  background-image:
+    radial-gradient(circle at 6px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 10px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 14px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 18px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+}
+
+windowcontrols button.maximize {
+  background-image:
+    radial-gradient(circle at 8px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 14px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 8px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 8px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 14px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+}
+
+windowcontrols button.close {
+  background-image:
+    radial-gradient(circle at 8px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 11px 11px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 17px 11px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 14px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 11px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 17px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 8px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+}
+
+headerbar windowcontrols button.close:hover,
+.titlebar windowcontrols button.close:hover {
+  color: @strata_bright;
+  background-color: alpha(#b9370c, 0.78);
+  border-color: alpha(@strata_bright, 0.72);
+  box-shadow: 0 0 8px alpha(#ff6918, 0.24);
+}
+
+headerbar windowcontrols button.minimize:hover,
+headerbar windowcontrols button.maximize:hover,
+.titlebar windowcontrols button.minimize:hover,
+.titlebar windowcontrols button.maximize:hover {
+  color: @strata_bright;
+  background-color: alpha(@strata_text, 0.14);
+  box-shadow: inset 0 -2px alpha(@strata_text, 0.72);
 }
 
 button:hover {
