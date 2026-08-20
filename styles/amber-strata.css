@@ -151,36 +151,36 @@ windowcontrols button.close image {
 
 windowcontrols button.minimize {
   background-image:
-    radial-gradient(circle at 6px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 10px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 14px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 18px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 22px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+    radial-gradient(circle at 8px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 12px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 24px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
 }
 
 windowcontrols button.maximize {
   background-image:
-    radial-gradient(circle at 8px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 14px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 20px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 8px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 20px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 8px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 14px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 20px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+    radial-gradient(circle at 10px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 10px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 10px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
 }
 
 windowcontrols button.close {
   background-image:
-    radial-gradient(circle at 8px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 20px 8px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 11px 11px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 17px 11px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 14px 14px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 11px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 17px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 8px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
-    radial-gradient(circle at 20px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+    radial-gradient(circle at 10px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 13px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 19px 20px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 13px 26px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 19px 26px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 10px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
 }
 
 headerbar windowcontrols button.close:hover,
