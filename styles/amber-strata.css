@@ -183,6 +183,78 @@ windowcontrols button.close {
     radial-gradient(circle at 22px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
 }
 
+/* Ghostty's tab overview is a GtkToggleButton and its main menu is a
+ * GtkMenuButton. Keep these selectors narrow so tab-close and New Tab retain
+ * their own glyphs. Both use the same node weight and center as the window
+ * controls above. */
+tabbar button.toggle image,
+tabbar menubutton image {
+  opacity: 0;
+}
+
+tabbar button.toggle {
+  background-image:
+    radial-gradient(circle at 10px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 17px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 10px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 10px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 29px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+}
+
+tabbar menubutton > button.toggle {
+  background-image:
+    radial-gradient(circle at 8px 18px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 12px 18px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 18px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 18px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 24px 18px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 12px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 28px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+}
+
+/* The start action is Ghostty's AdwSplitButton: New Tab on the left and the
+ * New Split menu on the right. Give each half its own compact matrix glyph. */
+tabbar splitbutton > button image,
+tabbar splitbutton > menubutton image {
+  opacity: 0;
+}
+
+/* GtkMenuButton may expose its stock dropdown marker as an `arrow` node
+ * rather than an image. Collapse it so only the Strata matrix glyph remains. */
+tabbar splitbutton > menubutton arrow {
+  min-width: 0;
+  min-height: 0;
+  opacity: 0;
+}
+
+tabbar splitbutton > button {
+  background-image:
+    radial-gradient(circle at 16px 15px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 19px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 8px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 12px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 20px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 24px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 27px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 31px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+}
+
+tabbar splitbutton > menubutton > button.toggle {
+  background-image:
+    radial-gradient(circle at 10px 18px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 22px 18px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 13px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 19px 23px, @strata_text 0, @strata_text 1.3px, transparent 1.4px),
+    radial-gradient(circle at 16px 28px, @strata_text 0, @strata_text 1.3px, transparent 1.4px);
+}
+
 headerbar windowcontrols button.close:hover,
 .titlebar windowcontrols button.close:hover {
   color: @strata_bright;
