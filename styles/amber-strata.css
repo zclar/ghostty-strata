@@ -289,7 +289,6 @@ button:checked {
 popover > contents,
 popover.background > contents,
 menu,
-.menu,
 dialog,
 messagedialog {
   color: @strata_text;
@@ -297,6 +296,85 @@ messagedialog {
   border: 1px solid @strata_border;
   border-radius: 12px;
   box-shadow: 0 8px 24px alpha(@strata_bg, 0.72);
+}
+
+/* Slow diagnostic deploy: GTK's popover is a separate native node, so test
+ * its contents directly and suppress the stock fade while it maps. */
+@keyframes strata-menu-deploy-test {
+  0% {
+    opacity: 1;
+    background-color: @strata_bright;
+    border-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    transform: scaleX(0.008) scaleY(0.01);
+  }
+
+  45% {
+    opacity: 1;
+    background-color: @strata_bright;
+    border-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    transform: scaleX(0.008) scaleY(1);
+  }
+
+  50% {
+    opacity: 1;
+    background-color: @strata_panel;
+    border-color: transparent;
+    border-radius: 0;
+    box-shadow: none;
+    transform: scaleX(0.008) scaleY(1);
+  }
+
+  58% {
+    opacity: 1;
+    background-color: @strata_panel;
+    border-color: @strata_border;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px alpha(@strata_bg, 0.72);
+    transform: scaleX(0.16) scaleY(1);
+  }
+
+  100% {
+    opacity: 1;
+    background-color: @strata_panel;
+    border-color: @strata_border;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px alpha(@strata_bg, 0.72);
+    transform: scaleX(1) scaleY(1);
+  }
+}
+
+@keyframes strata-menu-content-reveal {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+popover {
+  transition: none;
+}
+
+popover > arrow {
+  min-width: 0;
+  min-height: 0;
+  opacity: 0;
+}
+
+popover > contents {
+  animation: none;
+}
+
+/* Animate the single painted panel. The former broad `.menu` shell rule is
+ * intentionally absent above, avoiding the duplicate full-size outline. */
+popover.strata-deploy > contents {
+  transform-origin: top center;
+  animation: strata-menu-deploy-test 5000ms linear 1 both;
+}
+
+popover.strata-deploy > contents > * {
+  animation: strata-menu-content-reveal 650ms ease-out 5000ms 1 both;
 }
 
 popover modelbutton,
